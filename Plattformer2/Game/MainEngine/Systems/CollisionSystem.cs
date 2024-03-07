@@ -91,35 +91,33 @@ namespace Physics
 
                 if (xOverlap < yOverlap)
                 {
-                    int direction = Math.Sign(physicsBody.velocity.X);
-
                     if (aabb.X < otherAabbs[i].X)
                     {
                         collider.gameEntity.transform.position = new Vector2(otherAabbs[i].X - aabb.Width / 2, collider.gameEntity.transform.position.Y);
+                        // Adjust position before inverting velocity
+                        physicsBody.velocity.X *= -physicsBody.elasticity;
                     }
-                    else
+                    else if (aabb.X > otherAabbs[i].X)
                     {
                         collider.gameEntity.transform.position = new Vector2(otherAabbs[i].X + otherAabbs[i].Width + aabb.Width / 2, collider.gameEntity.transform.position.Y);
+                        // Adjust position before inverting velocity  
+                        physicsBody.velocity.X *= -physicsBody.elasticity;
                     }
-
-                    // Adjust position before inverting velocity
-                    physicsBody.velocity.X *= -direction * physicsBody.elasticity;
                 }
                 else
                 {
-                    int direction = Math.Sign(physicsBody.velocity.Y);
-
                     if (aabb.Y < otherAabbs[i].Y)
                     {
                         collider.gameEntity.transform.position = new Vector2(collider.gameEntity.transform.position.X, otherAabbs[i].Y - aabb.Height / 2);
+                        // Adjust position before inverting velocity  
+                        physicsBody.velocity.Y *= -physicsBody.elasticity;
                     }
-                    else
+                    else if (aabb.Y > otherAabbs[i].Y)
                     {
                         collider.gameEntity.transform.position = new Vector2(collider.gameEntity.transform.position.X, otherAabbs[i].Y + otherAabbs[i].Height + aabb.Height / 2);
+                        // Adjust position before inverting velocity  
+                        physicsBody.velocity.Y *= -physicsBody.elasticity;
                     }
-
-                    // Adjust position before inverting velocity
-                    physicsBody.velocity.Y *= -direction * physicsBody.elasticity;
                 }
                 //update all collider to new pos
                 for (int j = i; j < otherAabbs.Count; j++)
