@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "0vYtNji26xMy7kERSjPPEXxSQC/4hZbUcC50fqpw0A5mgN1oYn4CfeVU116okweex/8yZBgSB+EcGqphKnaC2Q==",
+  "success": true,
+  "projectFilePath": "c:\\Users\\atle.engelbrektsson\\Documents\\C#\\Plattformer2\\Plattformer2\\Plattformer2.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\atle.engelbrektsson\\.nuget\\packages\\raylib-cs\\6.0.0\\raylib-cs.6.0.0.nupkg.sha512",
+    "C:\\Users\\atle.engelbrektsson\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
