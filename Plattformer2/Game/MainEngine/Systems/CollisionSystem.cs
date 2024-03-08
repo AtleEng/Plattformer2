@@ -89,7 +89,7 @@ namespace Physics
                 float xOverlap = Math.Min(aabb.X + aabb.Width, otherAabbs[i].X + otherAabbs[i].Width) - Math.Max(aabb.X, otherAabbs[i].X);
                 float yOverlap = Math.Min(aabb.Y + aabb.Height, otherAabbs[i].Y + otherAabbs[i].Height) - Math.Max(aabb.Y, otherAabbs[i].Y);
 
-                if (xOverlap < yOverlap)
+                if (xOverlap < yOverlap && xOverlap * yOverlap != 0)
                 {
                     if (aabb.X < otherAabbs[i].X)
                     {
@@ -97,7 +97,7 @@ namespace Physics
                         // Adjust position before inverting velocity
                         physicsBody.velocity.X *= -physicsBody.elasticity;
                     }
-                    else if (aabb.X > otherAabbs[i].X)
+                    else
                     {
                         collider.gameEntity.transform.position = new Vector2(otherAabbs[i].X + otherAabbs[i].Width + aabb.Width / 2, collider.gameEntity.transform.position.Y);
                         // Adjust position before inverting velocity  
@@ -112,7 +112,7 @@ namespace Physics
                         // Adjust position before inverting velocity  
                         physicsBody.velocity.Y *= -physicsBody.elasticity;
                     }
-                    else if (aabb.Y > otherAabbs[i].Y)
+                    else
                     {
                         collider.gameEntity.transform.position = new Vector2(collider.gameEntity.transform.position.X, otherAabbs[i].Y + otherAabbs[i].Height + aabb.Height / 2);
                         // Adjust position before inverting velocity  
