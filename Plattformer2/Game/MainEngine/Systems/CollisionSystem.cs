@@ -36,9 +36,9 @@ namespace Physics
         }
         List<Collider> DetectCollision(Collider collider, PhysicsBody physicsBody)
         {
-            List<Tuple<Collider, float>> colliders = new();
+            List<Tuple<Collider, float>> collidersAndArea = new();
 
-            Rectangle aabb = GetCollisionRectangleFromCollider(collider.gameEntity, collider);
+            Rectangle aabb = GetRectangleFromCollider(collider);
 
             foreach (GameEntity otherGameEntity in Core.activeGameEntities)
             {
@@ -49,7 +49,7 @@ namespace Physics
                     {
                         if (PhysicsSettings.collisionMatrix[collider.layer, otherCollider.layer])
                         {
-                            Rectangle otherAabb = GetCollisionRectangleFromCollider(otherGameEntity, otherCollider);
+                            Rectangle otherAabb = GetRectangleFromCollider(otherCollider);
 
                             Rectangle collisonRec = Raylib.GetCollisionRec(aabb, otherAabb);
                             float area = collisonRec.Width * collisonRec.Height;
@@ -64,92 +64,72 @@ namespace Physics
                                 }
                                 else if (physicsBody != null)
                                 {
-                                    colliders.Add(new(otherCollider, area));
+                                    collidersAndArea.Add(new(otherCollider, area));
                                 }
                             }
                         }
                     }
                 }
             }
-            return SortOtherAabbsByArea(colliders); //Works
+            return SortOtherAabbsByArea(collidersAndArea); //Works
         }
 
-        void SolveCollision(List<Collider> other, PhysicsBody physicsBody, Collider collider)
+        void SolveCollision(List<Collider> other, PhysicsBody physicsBody, Collider collider) //ToDo 
         {
-            Rectangle aabb = GetCollisionRectangleFromCollider(collider.gameEntity, collider);
-
-            List<Rectangle> otherAabbs = new();
-            foreach (Collider c in other)
+            System.Console.WriteLine($"Name: {collider.gameEntity.name}");
+            for (int i = 0; i < other.Count; i++)
             {
-                otherAabbs.Add(GetCollisionRectangleFromCollider(c.gameEntity, c));
-            }
+                Rectangle aabb = GetRectangleFromCollider(collider);
+                Rectangle otherAabb = GetRectangleFromCollider(other[i]);
 
-            for (int i = 0; i < otherAabbs.Count; i++)
-            {
-                float xOverlap = Math.Min(aabb.X + aabb.Width, otherAabbs[i].X + otherAabbs[i].Width) - Math.Max(aabb.X, otherAabbs[i].X);
-                float yOverlap = Math.Min(aabb.Y + aabb.Height, otherAabbs[i].Y + otherAabbs[i].Height) - Math.Max(aabb.Y, otherAabbs[i].Y);
+                Rectangle collisonRec = Raylib.GetCollisionRec(aabb, otherAabb);
 
-                if (xOverlap < yOverlap && xOverlap * yOverlap != 0)
+                System.Console.WriteLine($"Overlap #{i}: {collisonRec.Width}|{collisonRec.Height}");
+
+                //solve collision
+                if (collisonRec.Width < collisonRec.Height && collisonRec.Width * collisonRec.Height != 0)
                 {
-                    if (aabb.X < otherAabbs[i].X)
+                    if (aabb.X < otherAabb.X)
                     {
-                        collider.gameEntity.transform.position = new Vector2(otherAabbs[i].X - aabb.Width / 2, collider.gameEntity.transform.position.Y);
+                        collider.gameEntity.transform.position.X = otherAabb.X - aabb.Width / 2;
                         // Adjust position before inverting velocity
                         physicsBody.velocity.X *= -physicsBody.elasticity;
                     }
                     else
                     {
-                        collider.gameEntity.transform.position = new Vector2(otherAabbs[i].X + otherAabbs[i].Width + aabb.Width / 2, collider.gameEntity.transform.position.Y);
+                        collider.gameEntity.transform.position.X = otherAabb.X + otherAabb.Width + aabb.Width / 2;
                         // Adjust position before inverting velocity  
                         physicsBody.velocity.X *= -physicsBody.elasticity;
                     }
                 }
-                else
+                else if (collisonRec.Width * collisonRec.Height != 0)
                 {
-                    if (aabb.Y < otherAabbs[i].Y)
+                    if (aabb.Y < otherAabb.Y)
                     {
-                        collider.gameEntity.transform.position = new Vector2(collider.gameEntity.transform.position.X, otherAabbs[i].Y - aabb.Height / 2);
+                        collider.gameEntity.transform.position.Y = otherAabb.Y - aabb.Height / 2;
                         // Adjust position before inverting velocity  
                         physicsBody.velocity.Y *= -physicsBody.elasticity;
                     }
                     else
                     {
-                        collider.gameEntity.transform.position = new Vector2(collider.gameEntity.transform.position.X, otherAabbs[i].Y + otherAabbs[i].Height + aabb.Height / 2);
+                        collider.gameEntity.transform.position.Y = otherAabb.Y + otherAabb.Height + aabb.Height / 2;
                         // Adjust position before inverting velocity  
                         physicsBody.velocity.Y *= -physicsBody.elasticity;
                     }
                 }
-                //update all collider to new pos
-                for (int j = i; j < otherAabbs.Count; j++)
-                {
-                    float newXOverlap = Math.Min(otherAabbs[i].X + otherAabbs[i].Width, otherAabbs[j].X + otherAabbs[j].Width) - Math.Max(otherAabbs[i].X, otherAabbs[j].X);
-                    float newYOverlap = Math.Min(otherAabbs[i].Y + otherAabbs[i].Height, otherAabbs[j].Y + otherAabbs[j].Height) - Math.Max(otherAabbs[i].Y, otherAabbs[j].Y);
-
-                    if (newXOverlap < newYOverlap)
-                    {
-                        float overlapDirection = Math.Sign(otherAabbs[j].X - otherAabbs[i].X);
-
-                        otherAabbs[j] = new Rectangle(otherAabbs[j].X + overlapDirection * newXOverlap, otherAabbs[j].Y, otherAabbs[j].Width, otherAabbs[j].Height);
-                    }
-                    else
-                    {
-                        float overlapDirection = Math.Sign(otherAabbs[j].Y - otherAabbs[i].Y);
-
-                        otherAabbs[j] = new Rectangle(otherAabbs[j].X, otherAabbs[j].Y + overlapDirection * newYOverlap, otherAabbs[j].Width, otherAabbs[j].Height);
-                    }
-                }
+            
             }
             Core.UpdateChildren(collider.gameEntity.transform.parent);
         }
 
-        Rectangle GetCollisionRectangleFromCollider(GameEntity entity, Collider collider)
+        Rectangle GetRectangleFromCollider(Collider collider)
         {
             return new Rectangle
             (
-                entity.transform.worldPosition.X + collider.offset.X - entity.transform.worldSize.X * collider.scale.X / 2,
-                entity.transform.worldPosition.Y + collider.offset.Y - entity.transform.worldSize.Y * collider.scale.Y / 2,
-                entity.transform.worldSize.X * collider.scale.X,
-                entity.transform.worldSize.Y * collider.scale.Y
+                collider.gameEntity.transform.worldPosition.X + collider.offset.X - collider.gameEntity.transform.worldSize.X * collider.scale.X / 2,
+                collider.gameEntity.transform.worldPosition.Y + collider.offset.Y - collider.gameEntity.transform.worldSize.Y * collider.scale.Y / 2,
+                collider.gameEntity.transform.worldSize.X * collider.scale.X,
+                collider.gameEntity.transform.worldSize.Y * collider.scale.Y
             );
         }
 
