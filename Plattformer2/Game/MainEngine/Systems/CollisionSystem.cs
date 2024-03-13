@@ -84,15 +84,6 @@ namespace Physics
 
                 Rectangle collisonRec = Raylib.GetCollisionRec(aabb, otherAabb);
 
-                if (Raylib.IsKeyPressed(KeyboardKey.P))
-                {
-                    System.Console.WriteLine($"{other[i].gameEntity.transform.position}");
-                    System.Console.WriteLine($"AABB: {aabb.X} , {aabb.Y} | {aabb.Width} , {aabb.Height}");
-                    System.Console.WriteLine($"AABB: {otherAabb.X} , {otherAabb.Y} | {otherAabb.Width} , {otherAabb.Height}");
-                    System.Console.WriteLine($"Overlap #{i}: {collisonRec.X} , {collisonRec.Y} | {collisonRec.Width} , {collisonRec.Height}");
-                }
-
-
                 //solve collision
                 if (collisonRec.Width < collisonRec.Height && collisonRec.Width * collisonRec.Height != 0)
                 {
@@ -122,9 +113,7 @@ namespace Physics
                 }
                 Core.UpdateChildren(collider.gameEntity.transform.parent);
             }
-
         }
-
         Rectangle GetRectangleFromCollider(Collider collider)
         {
             return new Rectangle
@@ -135,7 +124,6 @@ namespace Physics
                 collider.gameEntity.transform.worldSize.Y * collider.scale.Y
             );
         }
-
         List<Collider> SortOtherAabbsByArea(List<Tuple<Collider, float>> other) // works
         {
             // Sort the tuples by area in descending order
