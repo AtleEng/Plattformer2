@@ -76,7 +76,7 @@ namespace Physics
 
         void SolveCollision(List<Collider> other, PhysicsBody physicsBody, Collider collider) //ToDo 
         {
-            System.Console.WriteLine($"Name: {collider.gameEntity.name}");
+            //System.Console.WriteLine($"Name: {collider.gameEntity.name}");
             for (int i = 0; i < other.Count; i++)
             {
                 Rectangle aabb = GetRectangleFromCollider(collider);
@@ -84,7 +84,14 @@ namespace Physics
 
                 Rectangle collisonRec = Raylib.GetCollisionRec(aabb, otherAabb);
 
-                System.Console.WriteLine($"Overlap #{i}: {collisonRec.Width}|{collisonRec.Height}");
+                if (Raylib.IsKeyPressed(KeyboardKey.P))
+                {
+                    System.Console.WriteLine($"{other[i].gameEntity.transform.position}");
+                    System.Console.WriteLine($"AABB: {aabb.X} , {aabb.Y} | {aabb.Width} , {aabb.Height}");
+                    System.Console.WriteLine($"AABB: {otherAabb.X} , {otherAabb.Y} | {otherAabb.Width} , {otherAabb.Height}");
+                    System.Console.WriteLine($"Overlap #{i}: {collisonRec.X} , {collisonRec.Y} | {collisonRec.Width} , {collisonRec.Height}");
+                }
+
 
                 //solve collision
                 if (collisonRec.Width < collisonRec.Height && collisonRec.Width * collisonRec.Height != 0)
@@ -92,34 +99,30 @@ namespace Physics
                     if (aabb.X < otherAabb.X)
                     {
                         collider.gameEntity.transform.position.X = otherAabb.X - aabb.Width / 2;
-                        // Adjust position before inverting velocity
-                        physicsBody.velocity.X *= -physicsBody.elasticity;
                     }
                     else
                     {
                         collider.gameEntity.transform.position.X = otherAabb.X + otherAabb.Width + aabb.Width / 2;
-                        // Adjust position before inverting velocity  
-                        physicsBody.velocity.X *= -physicsBody.elasticity;
                     }
+                    int dir = Math.Sign(physicsBody.velocity.X);
+                    physicsBody.velocity.X *= dir * physicsBody.elasticity;
                 }
                 else if (collisonRec.Width * collisonRec.Height != 0)
                 {
                     if (aabb.Y < otherAabb.Y)
                     {
                         collider.gameEntity.transform.position.Y = otherAabb.Y - aabb.Height / 2;
-                        // Adjust position before inverting velocity  
-                        physicsBody.velocity.Y *= -physicsBody.elasticity;
                     }
                     else
                     {
                         collider.gameEntity.transform.position.Y = otherAabb.Y + otherAabb.Height + aabb.Height / 2;
-                        // Adjust position before inverting velocity  
-                        physicsBody.velocity.Y *= -physicsBody.elasticity;
                     }
+                    int dir = Math.Sign(physicsBody.velocity.Y);
+                    physicsBody.velocity.Y *= dir * physicsBody.elasticity;
                 }
-            
+                Core.UpdateChildren(collider.gameEntity.transform.parent);
             }
-            Core.UpdateChildren(collider.gameEntity.transform.parent);
+
         }
 
         Rectangle GetRectangleFromCollider(Collider collider)
