@@ -75,11 +75,12 @@ namespace Graphics
         }
         void RenderAll()
         {
+
             foreach (GameEntity gameEntity in Core.activeGameEntities)
             {
                 Sprite? spriteComponent = gameEntity.GetComponent<Sprite>();
-                //if (spriteComponent != null) { allSprites.Add(spriteComponent); }
-
+                if (spriteComponent != null) { allSprites.Add(spriteComponent); }
+                /*
                 Collider? collider = gameEntity.GetComponent<Collider>();
                 if (collider != null)
                 {
@@ -98,13 +99,14 @@ namespace Graphics
                         {
                             color = new Color(255, 55, 255, 250);
                         }
-
                     }
                     else if (collider.isColliding) { color = new Color(255, 55, 55, 250); }
 
                     Raylib.DrawRectangleRec(colliderBox, color);
                 }
+                */
             }
+
             foreach (Sprite sprite in allSprites)
             {
                 Vector2 p = WorldSpace.ConvertToCameraPosition(sprite.gameEntity.transform.worldPosition);
@@ -142,10 +144,10 @@ namespace Graphics
 
                     Raylib.DrawTexturePro(sprite.spriteSheet, source, destRec, Vector2.Zero, 0, sprite.colorTint);
                 }
-                Raylib.DrawCircle((int)p.X, (int)p.Y, 5, Color.Red);
+                //Raylib.DrawCircle((int)p.X, (int)p.Y, 5, Color.Red);
             }
-            DisplayGrid();
-            Raylib.DrawText($"GameEntitys:{Core.gameEntities.Count}\nFPS:{Raylib.GetFPS()}", 20, 20, 20, Color.RayWhite);
+            //DisplayGrid();
+            //Raylib.DrawText($"GameEntitys:{Core.gameEntities.Count}\nFPS:{Raylib.GetFPS()}", 20, 20, 20, Color.RayWhite);
             allSprites.Clear();
         }
         void AddSprite(Sprite sprite)

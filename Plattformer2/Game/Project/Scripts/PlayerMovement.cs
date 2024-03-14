@@ -7,11 +7,8 @@ using Animation;
 
 namespace Engine
 {
-    [Serializable]
     public class PlayerMovement : Component, IScript
     {
-        public PlayerMovement() { }
-
         //X Movement
         private float moveSpeed = 100;
         private float moveInput;

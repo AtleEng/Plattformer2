@@ -55,6 +55,8 @@ namespace Engine
             PlayerMovement playerMovement = new();
             AddComponent<PlayerMovement>(playerMovement);
 
+            AddComponent<CameraController>(new CameraController(transform));
+
             //ground check (child of player)
             Check check = new(2);
             EntityManager.SpawnEntity(check, new Vector2(0, 0.4f), new Vector2(0.5f, 0.5f), this.transform);

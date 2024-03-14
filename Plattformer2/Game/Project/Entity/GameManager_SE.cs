@@ -16,10 +16,6 @@ namespace Engine
             Camera.zoom = 1.6f;
 
             AddComponent<GameManagerScript>(new GameManagerScript());
-
-            EntityManager.SpawnEntity(new Player(), new Vector2(0, -5));
         }
-
-
     }
 }

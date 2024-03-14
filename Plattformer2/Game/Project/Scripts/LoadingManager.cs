@@ -1,9 +1,5 @@
-using System.Collections.Generic;
 using System.Numerics;
-using CoreEngine;
-using Engine;
 using System.Text.Json;
-using Physics;
 
 namespace Engine
 {
@@ -15,9 +11,11 @@ namespace Engine
         {
             {1, typeof(Block)},
             {2, typeof(JumpPad)},
-            { 3, typeof(WalkEnemy)},
-            { 4, typeof(JumpingEnemy)},
+            {3, typeof(WalkEnemy)},
+            {4, typeof(JumpingEnemy)},
             {5, typeof(RandomEnemy)},
+            {6, typeof(FlyingEnemy)},
+            {8, typeof(Player)},
             {9, typeof(Portal)},
         };
 
@@ -27,9 +25,7 @@ namespace Engine
             {2, "Level2"},
             {3, "Level3"}
         };
-
         static List<GameEntity> levelEntities = new();
-
 
         static JsonSerializerOptions options = new JsonSerializerOptions
         {
@@ -56,12 +52,17 @@ namespace Engine
             if (levels.ContainsKey(i))
             {
                 currentLevel = i;
+
                 ClearLevel();
-                int[,] level = LoadLevel(levels[i]);
-                SpawEntitiesInLevel(level);
+
+                int[,]? level = LoadLevel(levels[i]);
+                if (level != null)
+                {
+                    SpawEntitiesInLevel(level);
+                }
             }
         }
-        public static int[,] LoadLevel(string path)
+        public static int[,]? LoadLevel(string path)
         {
             try
             {
@@ -69,21 +70,24 @@ namespace Engine
                 string json = File.ReadAllText(Path.Combine(prePath, $"{path}.json"));
 
                 // Deserialize JSON to jagged array
-                int[][] jaggedArray = JsonSerializer.Deserialize<int[][]>(json, options);
+                int[][]? jaggedArray = JsonSerializer.Deserialize<int[][]>(json, options);
 
                 // Convert jagged array to 2D array
-                int[,] level = ConvertTo2DArray(jaggedArray);
+                if (jaggedArray != null)
+                {
+                    int[,] level = ConvertTo2DArray(jaggedArray);
 
-                if (level != null)
-                {
-                    System.Console.WriteLine($"{path} loaded");
-                    return level;
+                    if (level != null)
+                    {
+                        System.Console.WriteLine($"{path} loaded");
+                        return level;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Deserialization failed, {path} was not loaded");
+                    }
                 }
-                else
-                {
-                    System.Console.WriteLine($"Deserialization failed, {path} was not loaded");
-                    return null;
-                }
+                return null;
             }
             catch (Exception e)
             {
@@ -100,12 +104,14 @@ namespace Engine
                 {
                     if (level[x, y] > 0)
                     {
-                        GameEntity entity = GetEntityInstance(level[x, y]);
-                        levelEntities.Add(entity);
+                        GameEntity? entity = GetEntityInstance(level[x, y]);
+                        if (entity != null)
+                        {
+                            levelEntities.Add(entity);
+                            Vector2 spawPos = new Vector2(y - level.GetLength(1) / 2, x - level.GetLength(0) / 2);
 
-                        Vector2 spawPos = new Vector2(y - level.GetLength(1) / 2, x - level.GetLength(0) / 2);
-
-                        EntityManager.SpawnEntity(entity, spawPos);
+                            EntityManager.SpawnEntity(entity, spawPos);
+                        }
                     }
                 }
             }
@@ -119,14 +125,14 @@ namespace Engine
             levelEntities.Clear();
         }
         // Method to spawn GameEntity based on int key
-        static GameEntity GetEntityInstance(int key)
+        static GameEntity? GetEntityInstance(int key)
         {
             // Check if the key exists in the dictionary
             if (entitysInLevel.ContainsKey(key))
             {
                 Type entityType = entitysInLevel[key];
                 // Use reflection to create an instance of the specified type
-                GameEntity newEntity = (GameEntity)Activator.CreateInstance(entityType);
+                GameEntity? newEntity = (GameEntity?)Activator.CreateInstance(entityType);
 
                 if (newEntity == null) { System.Console.WriteLine($"Error, the number {key} is wrong"); }
                 // Return the spawned GameEntity
@@ -138,7 +144,7 @@ namespace Engine
                 return null;
             }
         }
-    
+
         // Convert 2D array to jagged array
         static int[][] ConvertToJaggedArray(int[,] array)
         {

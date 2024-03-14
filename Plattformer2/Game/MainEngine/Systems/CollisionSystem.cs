@@ -24,7 +24,7 @@ namespace Physics
 
                 if (collider != null && physicsBody != null)
                 {
-                    List<Collider> colliders = DetectCollision(collider, physicsBody); //works
+                    List<Collider> colliders = DetectCollision(collider, physicsBody);
 
                     if (!collider.isTrigger)
                     {
@@ -60,7 +60,7 @@ namespace Physics
                                 if (collider.isTrigger || otherCollider.isTrigger)
                                 {
                                     collider.gameEntity.OnTrigger(otherCollider);
-                                    otherCollider.gameEntity.OnTrigger(collider);
+                                    //otherCollider.gameEntity.OnTrigger(collider);
                                 }
                                 else if (physicsBody != null)
                                 {
