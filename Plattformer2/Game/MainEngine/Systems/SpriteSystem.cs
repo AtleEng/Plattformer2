@@ -80,7 +80,7 @@ namespace Graphics
             {
                 Sprite? spriteComponent = gameEntity.GetComponent<Sprite>();
                 if (spriteComponent != null) { allSprites.Add(spriteComponent); }
-                /*
+
                 Collider? collider = gameEntity.GetComponent<Collider>();
                 if (collider != null)
                 {
@@ -104,7 +104,7 @@ namespace Graphics
 
                     Raylib.DrawRectangleRec(colliderBox, color);
                 }
-                */
+
             }
 
             foreach (Sprite sprite in allSprites)

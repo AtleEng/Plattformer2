@@ -12,11 +12,14 @@ namespace Engine
         public Player()
         {
             name = "Player";
-
+            if (texture.Id == 0)
+            {
+                texture = Raylib.LoadTexture(@"Game\Project\Images\PlayerSpriteSheet.png");
+            }
             //sprite
             Sprite sprite = new Sprite
             {
-                spriteSheet = Raylib.LoadTexture(@"Game\Project\Images\PlayerSpriteSheet.png"),
+                spriteSheet = texture,
                 spriteGrid = new Vector2(4, 2),
                 FrameIndex = 4
             };
@@ -61,6 +64,10 @@ namespace Engine
             Check check = new(2);
             EntityManager.SpawnEntity(check, new Vector2(0, 0.4f), new Vector2(0.5f, 0.5f), this.transform);
             playerMovement.groundCheck = check.GetComponent<Collider>();
+
+            Check wallCheck = new(2);
+            EntityManager.SpawnEntity(wallCheck, new Vector2(-0.3f, 0f), new Vector2(0.4f, 0.4f), this.transform);
+            playerMovement.wallCheck = wallCheck.GetComponent<Collider>();
         }
     }
 }

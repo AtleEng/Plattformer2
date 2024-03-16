@@ -19,9 +19,17 @@ namespace Engine
 
         public override void Update(float delta)
         {
-            if (Raylib.IsKeyPressed(KeyboardKey.Backspace))
+            if (Raylib.IsKeyPressed(KeyboardKey.One))
+            {
+                LoadingManager.Load(1);
+            }
+            if (Raylib.IsKeyPressed(KeyboardKey.Two))
             {
                 LoadingManager.Load(2);
+            }
+            if (Raylib.IsKeyPressed(KeyboardKey.Three))
+            {
+                LoadingManager.Load(3);
             }
         }
 

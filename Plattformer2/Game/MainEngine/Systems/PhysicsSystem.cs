@@ -20,23 +20,23 @@ namespace Physics
                 }
             }
         }
-        void UpdatePhysics(PhysicsBody physicsBody, float delta)
+        void UpdatePhysics(PhysicsBody pB, float delta)
         {
-            if (physicsBody.physicsType == PhysicsBody.PhysicsType.staticType)
+            if (pB.physicsType == PhysicsBody.PhysicsType.staticType)
             {
                 return;
             }
             // Apply drag separately to X and Y
-            physicsBody.velocity.X *= 1 - physicsBody.dragX * delta;
-            physicsBody.velocity.Y *= 1 - physicsBody.dragY * delta;
+            pB.velocity.X *= 1 - pB.dragX * delta;
+            pB.velocity.Y *= 1 - pB.dragY * delta;
 
-            physicsBody.acceleration += physicsBody.Gravity * delta * 60;
+            pB.acceleration += pB.Gravity * delta * 60;
 
-            physicsBody.velocity += physicsBody.acceleration * delta;
+            pB.velocity += pB.acceleration * delta;
 
-            physicsBody.gameEntity.transform.position += physicsBody.velocity * delta;
+            pB.gameEntity.transform.position += pB.velocity * delta;
 
-            physicsBody.acceleration = Vector2.Zero;
+            pB.acceleration = Vector2.Zero;
         }
         public static class PhysicsSettings
         {

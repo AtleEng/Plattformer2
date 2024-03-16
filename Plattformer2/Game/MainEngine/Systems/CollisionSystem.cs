@@ -87,29 +87,43 @@ namespace Physics
                 //solve collision
                 if (collisonRec.Width < collisonRec.Height && collisonRec.Width * collisonRec.Height != 0)
                 {
+                    int dir = Math.Sign(physicsBody.velocity.X);
                     if (aabb.X < otherAabb.X)
                     {
                         collider.gameEntity.transform.position.X = otherAabb.X - aabb.Width / 2;
+                        if (dir > 0)
+                        {
+                            physicsBody.velocity.X *= -dir * physicsBody.elasticity;
+                        }
                     }
                     else
                     {
                         collider.gameEntity.transform.position.X = otherAabb.X + otherAabb.Width + aabb.Width / 2;
+                        if (dir < 0)
+                        {
+                            physicsBody.velocity.X *= dir * physicsBody.elasticity;
+                        }
                     }
-                    int dir = Math.Sign(physicsBody.velocity.X);
-                    physicsBody.velocity.X *= dir * physicsBody.elasticity;
                 }
                 else if (collisonRec.Width * collisonRec.Height != 0)
                 {
+                    int dir = Math.Sign(physicsBody.velocity.Y);
                     if (aabb.Y < otherAabb.Y)
                     {
                         collider.gameEntity.transform.position.Y = otherAabb.Y - aabb.Height / 2;
+                        if (dir > 0)
+                        {
+                            physicsBody.velocity.Y *= -dir * physicsBody.elasticity;
+                        }
                     }
                     else
                     {
                         collider.gameEntity.transform.position.Y = otherAabb.Y + otherAabb.Height + aabb.Height / 2;
+                        if (dir < 0)
+                        {
+                            physicsBody.velocity.Y *= dir * physicsBody.elasticity;
+                        }
                     }
-                    int dir = Math.Sign(physicsBody.velocity.Y);
-                    physicsBody.velocity.Y *= dir * physicsBody.elasticity;
                 }
                 Core.UpdateChildren(collider.gameEntity.transform.parent);
             }

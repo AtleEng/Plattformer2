@@ -9,11 +9,12 @@ namespace Engine
 {
     public class PlayerMovement : Component, IScript
     {
-        //X Movement
+        #region XMovement
         private float moveSpeed = 100;
         private float moveInput;
+        #endregion
 
-        //Normal jumping
+        #region NormalJump
         private float jumpForce = 10;
 
         private float jumpTime = 0.3f;
@@ -27,11 +28,22 @@ namespace Engine
         private float jumpBufferLength = 0.1f;
         private float jumpBufferLengthCounter;
 
-        //isGrounded
         public Transform feetPos;
 
         public Collider groundCheck;
-        private bool isGrounded = true;
+        #endregion
+
+        #region WallJump
+        bool isWallJumping;
+        float wallJumpTime = 0.3f;
+        float wallJumpTimer;
+
+        float wallJumpForce = 15;
+
+        int dir = 0;
+
+        public Collider wallCheck;
+        #endregion
 
         //Physics
         float maxVelocityX = 10;
@@ -50,9 +62,10 @@ namespace Engine
             anim = gameEntity.GetComponent<Animator>();
             sprite = gameEntity.GetComponent<Sprite>();
         }
-        public override void Update(float delta)
+
+        void HandleAnimation()
         {
-            if (isGrounded)
+            if (groundCheck.isColliding)
             {
                 if (pB.velocity.X != 0)
                 {
@@ -90,28 +103,58 @@ namespace Engine
                     }
                 }
             }
+        }
+        public override void Update(float delta)
+        {
+            HandleAnimation();
 
-            Inputs(delta);
-            CheckWorld();
-            Flip();
+            if (!isWallJumping)
+            {
+                Inputs(delta);
+                Jump(delta);
+                xMovement(delta);
 
-            Jump(delta);
-            xMovement(delta);
+                if (wallCheck.isColliding && !groundCheck.isColliding && pB.velocity.Y > 0)
+                {
+                    pB.dragY = 20;
+                    if (Raylib.IsKeyPressed(KeyboardKey.Space))
+                    {
+                        isWallJumping = true;
+                        pB.dragY = 0;
+                        pB.velocity.Y = -wallJumpForce;
+                        moveInput = dir;
+                    }
+                }
+                else
+                {
+                    pB.dragY = 0;
+                }
+            }
+            else
+            {
+                WallJump(delta);
+            }
 
+            //Hanterar spelarens hastighet
             if (Math.Abs(pB.velocity.X) < 1) { pB.velocity.X = 0; }
+
             pB.velocity.X = Math.Clamp(pB.velocity.X, -maxVelocityX, maxVelocityX);
             pB.velocity.Y = Math.Clamp(pB.velocity.Y, -maxVelocityY, maxVelocityY);
         }
         void Inputs(float delta)
         {
-            //manage jump buffer
-            if (Raylib.IsKeyPressed(KeyboardKey.Enter))
+            moveInput = 0;
+            if (Raylib.IsKeyDown(KeyboardKey.D))
             {
-                pB.velocity = Vector2.Zero;
-                gameEntity.transform.position = Vector2.Zero;
+                moveInput++;
             }
+            if (Raylib.IsKeyDown(KeyboardKey.A))
+            {
+                moveInput--;
+            }
+
             //manage hangtime
-            if (isGrounded)
+            if (groundCheck.isColliding)
             {
                 hangTimeCounter = hangTime;
             }
@@ -155,31 +198,24 @@ namespace Engine
                 isJumping = false;
             }
         }
-        void CheckWorld()
-        {
-            isGrounded = groundCheck.isColliding;
-        }
         void xMovement(float delta)
         {
-            moveInput = 0;
-            if (Raylib.IsKeyDown(KeyboardKey.D))
-            {
-                moveInput++;
-            }
-            if (Raylib.IsKeyDown(KeyboardKey.A))
-            {
-                moveInput--;
-            }
             pB.velocity.X += moveInput * moveSpeed * delta;
-        }
-        void Flip()
-        {
+
             if (moveInput > 0)
             {
+                wallCheck.gameEntity.transform.position.X = 0.3f;
+
+                dir = -1;
+
                 sprite.isFlipedX = false;
             }
             else if (moveInput < 0)
             {
+                wallCheck.gameEntity.transform.position.X = -0.3f;
+
+                dir = 1;
+
                 sprite.isFlipedX = true;
             }
         }
@@ -188,6 +224,18 @@ namespace Engine
             if (isJumping)
             {
                 pB.velocity.Y = -jumpForce * delta * 60;
+            }
+        }
+
+        void WallJump(float delta)
+        {
+            xMovement(delta);
+
+            wallJumpTimer -= delta;
+            if (wallJumpTimer <= 0)
+            {
+                wallJumpTimer = wallJumpTime;
+                isWallJumping = false;
             }
         }
         public enum PlayerStates

@@ -1,14 +1,10 @@
 using System.Numerics;
-using CoreEngine;
 using Engine;
 
 namespace Physics
 {
-    [Serializable]
     public class PhysicsBody : Component
     {
-        public PhysicsBody() { }
-
         public PhysicsType physicsType = PhysicsType.dynamicType;
         public float mass = 1;
         public Vector2 velocity = Vector2.Zero;
