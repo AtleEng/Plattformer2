@@ -35,12 +35,8 @@ namespace Engine
 
         #region WallJump
         bool isWallJumping;
-        float wallJumpTime = 0.3f;
+        float wallJumpTime = 0.2f;
         float wallJumpTimer;
-
-        float wallJumpForce = 15;
-
-        int dir = 0;
 
         public Collider wallCheck;
         #endregion
@@ -53,8 +49,7 @@ namespace Engine
         //Sprite & Animation
         Sprite sprite;
         Animator anim;
-        PlayerStates playerStates = PlayerStates.idle;
-
+        PlayerStates playerState = PlayerStates.idle;
 
         public override void Start()
         {
@@ -69,17 +64,17 @@ namespace Engine
             {
                 if (pB.velocity.X != 0)
                 {
-                    if (playerStates != PlayerStates.running)
+                    if (playerState != PlayerStates.running)
                     {
-                        playerStates = PlayerStates.running;
+                        playerState = PlayerStates.running;
                         anim.PlayAnimation("Run");
                     }
                 }
                 else
                 {
-                    if (playerStates != PlayerStates.idle)
+                    if (playerState != PlayerStates.idle)
                     {
-                        playerStates = PlayerStates.idle;
+                        playerState = PlayerStates.idle;
                         anim.PlayAnimation("Idle");
                     }
                 }
@@ -88,18 +83,28 @@ namespace Engine
             {
                 if (pB.velocity.Y < 0)
                 {
-                    if (playerStates != PlayerStates.jump)
+                    if (playerState != PlayerStates.jump)
                     {
-                        playerStates = PlayerStates.jump;
+                        playerState = PlayerStates.jump;
                         anim.PlayAnimation("Jump");
                     }
                 }
                 else
                 {
-                    if (playerStates != PlayerStates.fall)
+                    if (wallCheck.isColliding && moveInput != 0)
                     {
-                        playerStates = PlayerStates.fall;
-                        anim.PlayAnimation("Fall");
+                        if (playerState != PlayerStates.wallGliding)
+                        {
+                            playerState = PlayerStates.wallGliding;
+                        }
+                    }
+                    else
+                    {
+                        if (playerState != PlayerStates.fall)
+                        {
+                            playerState = PlayerStates.fall;
+                            anim.PlayAnimation("Fall");
+                        }
                     }
                 }
             }
@@ -108,32 +113,20 @@ namespace Engine
         {
             HandleAnimation();
 
-            if (!isWallJumping)
-            {
-                Inputs(delta);
-                Jump(delta);
-                xMovement(delta);
+            Inputs(delta);
 
-                if (wallCheck.isColliding && !groundCheck.isColliding && pB.velocity.Y > 0)
-                {
-                    pB.dragY = 20;
-                    if (Raylib.IsKeyPressed(KeyboardKey.Space))
-                    {
-                        isWallJumping = true;
-                        pB.dragY = 0;
-                        pB.velocity.Y = -wallJumpForce;
-                        moveInput = dir;
-                    }
-                }
-                else
-                {
-                    pB.dragY = 0;
-                }
-            }
-            else
+            if (isWallJumping)
             {
                 WallJump(delta);
             }
+            else
+            {
+                XInput();
+            }
+            xMovement(delta);
+            Jump(delta);
+
+            System.Console.WriteLine(moveInput);
 
             //Hanterar spelarens hastighet
             if (Math.Abs(pB.velocity.X) < 1) { pB.velocity.X = 0; }
@@ -141,7 +134,7 @@ namespace Engine
             pB.velocity.X = Math.Clamp(pB.velocity.X, -maxVelocityX, maxVelocityX);
             pB.velocity.Y = Math.Clamp(pB.velocity.Y, -maxVelocityY, maxVelocityY);
         }
-        void Inputs(float delta)
+        void XInput()
         {
             moveInput = 0;
             if (Raylib.IsKeyDown(KeyboardKey.D))
@@ -152,16 +145,9 @@ namespace Engine
             {
                 moveInput--;
             }
-
-            //manage hangtime
-            if (groundCheck.isColliding)
-            {
-                hangTimeCounter = hangTime;
-            }
-            else
-            {
-                hangTimeCounter -= delta;
-            }
+        }
+        void Inputs(float delta)
+        {
             //manage jump buffer
             if (Raylib.IsKeyPressed(KeyboardKey.Space))
             {
@@ -172,8 +158,30 @@ namespace Engine
                 jumpBufferLengthCounter -= delta;
             }
 
-            //manage jump
-            if (jumpBufferLengthCounter >= 0 && hangTimeCounter > 0)
+            if (playerState == PlayerStates.wallGliding)
+            {
+                pB.dragY = 20;
+                if (jumpBufferLengthCounter >= 0)
+                {
+                    moveInput *= -1;
+                    pB.dragY = 0;
+                    isWallJumping = true;
+                }
+            }
+            else
+            {
+                pB.dragY = 0;
+                //manage hangtime
+                if (groundCheck.isColliding)
+                {
+                    hangTimeCounter = hangTime;
+                }
+                else
+                {
+                    hangTimeCounter -= delta;
+                }
+            }
+            if (jumpBufferLengthCounter >= 0 && (hangTimeCounter > 0 || playerState == PlayerStates.wallGliding))
             {
                 isJumping = true;
                 jumpTimeCounter = jumpTime;
@@ -192,8 +200,7 @@ namespace Engine
                     isJumping = false;
                 }
             }
-
-            if (!Raylib.IsKeyDown(KeyboardKey.Space))
+            else
             {
                 isJumping = false;
             }
@@ -206,15 +213,11 @@ namespace Engine
             {
                 wallCheck.gameEntity.transform.position.X = 0.3f;
 
-                dir = -1;
-
                 sprite.isFlipedX = false;
             }
             else if (moveInput < 0)
             {
                 wallCheck.gameEntity.transform.position.X = -0.3f;
-
-                dir = 1;
 
                 sprite.isFlipedX = true;
             }
@@ -229,8 +232,6 @@ namespace Engine
 
         void WallJump(float delta)
         {
-            xMovement(delta);
-
             wallJumpTimer -= delta;
             if (wallJumpTimer <= 0)
             {
@@ -240,7 +241,7 @@ namespace Engine
         }
         public enum PlayerStates
         {
-            idle, running, jump, fall
+            idle, running, jump, fall, wallGliding
         }
     }
 }
