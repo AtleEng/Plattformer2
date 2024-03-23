@@ -8,7 +8,7 @@ using Physics;
 
 namespace Graphics
 {
-    public class SpriteSystem : GameSystem
+    public class RenderSystem : GameSystem
     {
         public float scale;
         int offsetX;
@@ -19,7 +19,7 @@ namespace Graphics
         float gameScreenWidth;
         float gameScreenHeight;
 
-        List<Sprite> allSprites = new();
+        List<IRendable> allRenderObjects = new();
 
         public override void Start()
         {
@@ -75,11 +75,10 @@ namespace Graphics
         }
         void RenderAll()
         {
-
             foreach (GameEntity gameEntity in Core.activeGameEntities)
             {
-                Sprite? spriteComponent = gameEntity.GetComponent<Sprite>();
-                if (spriteComponent != null) { allSprites.Add(spriteComponent); }
+                IRendable? rB = gameEntity.GetComponentInterface<IRendable>();
+                if (rB != null) { allRenderObjects.Add(rB); }
 
                 Collider? collider = gameEntity.GetComponent<Collider>();
                 if (collider != null)
@@ -104,60 +103,22 @@ namespace Graphics
 
                     Raylib.DrawRectangleRec(colliderBox, color);
                 }
-
             }
-
-            foreach (Sprite sprite in allSprites)
+            allRenderObjects.Sort((a, b) => a.Layer.CompareTo(b.Layer));
+            foreach (IRendable rB in allRenderObjects)
             {
-                Vector2 p = WorldSpace.ConvertToCameraPosition(sprite.gameEntity.transform.worldPosition);
-                Vector2 s = WorldSpace.ConvertToCameraSize(sprite.gameEntity.transform.worldSize);
-
-                Rectangle destRec = new Rectangle(
-                (int)p.X - (int)(s.X / 2), (int)p.Y - (int)(s.Y / 2), //pos
-                (int)s.X, (int)s.Y //size
-                );
-
-                //Raylib.DrawRectangleRec(destRec, new Color(255, 255, 255, 255));
-
-                if (sprite.spriteSheet.Id != 0)
-                {
-                    int flipX = sprite.isFlipedX ? -1 : 1;
-                    int flipY = sprite.isFlipedY ? -1 : 1;
-
-                    int i = sprite.FrameIndex;
-
-                    int x = (int)sprite.spriteGrid.X;
-                    int y = (int)sprite.spriteGrid.Y;
-
-                    float gridSizeX = sprite.spriteSheet.Width / x;
-                    float gridSizeY = sprite.spriteSheet.Height / y;
-
-                    int posX = i % x;
-                    int posY = i / x;
-
-                    Rectangle source = new Rectangle(
-                        (int)(posX * gridSizeX),
-                        (int)(posY * gridSizeY),
-                        sprite.spriteSheet.Width * flipX / sprite.spriteGrid.X,
-                    sprite.spriteSheet.Height * flipY / sprite.spriteGrid.Y
-                    );
-
-                    Raylib.DrawTexturePro(sprite.spriteSheet, source, destRec, Vector2.Zero, 0, sprite.colorTint);
-                }
-                //Raylib.DrawCircle((int)p.X, (int)p.Y, 5, Color.Red);
+                rB.Render();
             }
-            //DisplayGrid();
-            //Raylib.DrawText($"GameEntitys:{Core.gameEntities.Count}\nFPS:{Raylib.GetFPS()}", 20, 20, 20, Color.RayWhite);
-            allSprites.Clear();
+            allRenderObjects.Clear();
         }
-        void AddSprite(Sprite sprite)
+        public void AddRenderObject(IRendable rB)
         {
-            allSprites.Add(sprite);
-            allSprites.Sort((a, b) => a.layer.CompareTo(b.layer));
+            allRenderObjects.Add(rB);
+            //allRenderObjects.Sort((a, b) => a.layer.CompareTo(b.layer));
         }
-        void RemoveSprite(Sprite sprite)
+        public void RemoveSprite(IRendable rB)
         {
-            allSprites.Remove(sprite);
+            allRenderObjects.Remove(rB);
         }
         void SetValuesOfWindow()
         {

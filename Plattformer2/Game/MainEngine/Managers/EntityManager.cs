@@ -35,7 +35,6 @@ namespace Engine
             }
             Core.entitiesToAdd.Add(entity);
         }
-
         public static void DestroyEntity(GameEntity entity)
         {
             foreach (Component component in entity.components)
@@ -48,6 +47,5 @@ namespace Engine
             }
             Core.entitiesToRemove.Add(entity);
         }
-
     }
 }

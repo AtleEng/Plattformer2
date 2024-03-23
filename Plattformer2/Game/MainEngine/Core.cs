@@ -35,7 +35,7 @@ namespace CoreEngine
             AddSystem<PhysicsSystem>();
             AddSystem<CollisionSystem>();
             AddSystem<AnimationSystem>();
-            AddSystem<SpriteSystem>();
+            AddSystem<RenderSystem>();
 
             // Innit all the systems in the right order
             systems[systems.Count - 1].Start();

@@ -49,11 +49,10 @@ namespace Engine
 
         static public void Load(int i)
         {
+            ClearLevel();
             if (levels.ContainsKey(i))
             {
                 currentLevel = i;
-
-                ClearLevel();
 
                 int[,]? level = LoadLevel(levels[i]);
                 if (level != null)

@@ -10,11 +10,16 @@ namespace Engine
     public class PlayerMovement : Component, IScript
     {
         #region XMovement
-        private float moveSpeed = 100;
+        float moveSpeed = 100;
+        float airSpeed = 15;
+
+        float groundDrag = 10;
+        float airDrag = 1;
         private float moveInput;
         #endregion
 
         #region NormalJump
+        private float innitJumpForce = 10;
         private float jumpForce = 10;
 
         private float jumpTime = 0.3f;
@@ -34,8 +39,8 @@ namespace Engine
         #endregion
 
         #region WallJump
-        bool isWallJumping;
-        float wallJumpTime = 0.2f;
+        bool isWallJumping = true;
+        float wallJumpTime = 0.15f;
         float wallJumpTimer;
 
         public Collider wallCheck;
@@ -45,6 +50,7 @@ namespace Engine
         float maxVelocityX = 10;
         float maxVelocityY = 30;
         public PhysicsBody pB;
+        public Collider collider;
 
         //Sprite & Animation
         Sprite sprite;
@@ -56,6 +62,7 @@ namespace Engine
             pB = gameEntity.GetComponent<PhysicsBody>();
             anim = gameEntity.GetComponent<Animator>();
             sprite = gameEntity.GetComponent<Sprite>();
+            collider = gameEntity.GetComponent<Collider>();
         }
 
         void HandleAnimation()
@@ -113,7 +120,7 @@ namespace Engine
         {
             HandleAnimation();
 
-            Inputs(delta);
+            JumpInputs(delta);
 
             if (isWallJumping)
             {
@@ -125,12 +132,11 @@ namespace Engine
             }
             xMovement(delta);
             Jump(delta);
-
-            System.Console.WriteLine(moveInput);
-
-            //Hanterar spelarens hastighet
-            if (Math.Abs(pB.velocity.X) < 1) { pB.velocity.X = 0; }
-
+            if (groundCheck.isColliding)
+            {
+                //Hanterar spelarens hastighet
+                if (Math.Abs(pB.velocity.X) < 1) { pB.velocity.X = 0; }
+            }
             pB.velocity.X = Math.Clamp(pB.velocity.X, -maxVelocityX, maxVelocityX);
             pB.velocity.Y = Math.Clamp(pB.velocity.Y, -maxVelocityY, maxVelocityY);
         }
@@ -146,7 +152,7 @@ namespace Engine
                 moveInput--;
             }
         }
-        void Inputs(float delta)
+        void JumpInputs(float delta)
         {
             //manage jump buffer
             if (Raylib.IsKeyPressed(KeyboardKey.Space))
@@ -189,7 +195,7 @@ namespace Engine
                 hangTimeCounter = 0;
             }
 
-            if (Raylib.IsKeyDown(KeyboardKey.Space) && isJumping == true)
+            if (Raylib.IsKeyDown(KeyboardKey.Space))
             {
                 if (jumpTimeCounter > 0)
                 {
@@ -207,7 +213,16 @@ namespace Engine
         }
         void xMovement(float delta)
         {
-            pB.velocity.X += moveInput * moveSpeed * delta;
+            if (groundCheck.isColliding || isWallJumping)
+            {
+                pB.dragX = groundDrag;
+                pB.velocity.X += moveInput * moveSpeed * delta;
+            }
+            else
+            {
+                pB.dragX = airDrag;
+                pB.velocity.X += moveInput * airSpeed * delta;
+            }
 
             if (moveInput > 0)
             {
@@ -229,7 +244,6 @@ namespace Engine
                 pB.velocity.Y = -jumpForce * delta * 60;
             }
         }
-
         void WallJump(float delta)
         {
             wallJumpTimer -= delta;

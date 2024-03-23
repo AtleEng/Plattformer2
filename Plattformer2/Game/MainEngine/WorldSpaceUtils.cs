@@ -8,7 +8,7 @@ namespace Engine
     public static class WorldSpace
     {
         public static int pixelsPerUnit = 40;
-        static SpriteSystem RenderSystem => (SpriteSystem)Core.systems[Core.systems.Count - 1];
+        static RenderSystem RenderSystem => (RenderSystem)Core.systems[Core.systems.Count - 1];
         public static Vector2 GetVirtualMousePos() // Uppdatera virtuella musen (låst till spelfönstret)
         {
             // Virtual mouse position

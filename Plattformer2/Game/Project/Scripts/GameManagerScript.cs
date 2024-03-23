@@ -4,32 +4,55 @@ using Raylib_cs;
 using Engine;
 using Physics;
 using Animation;
+using UI;
 
 namespace Engine
 {
     public class GameManagerScript : Component, IScript
     {
-
+        UIText uIText;
+        bool hasStartedGame;
         public override void Start()
         {
-            //LoadingManager.SaveLevel("Level1", _level1);
+            uIText = gameEntity.GetComponent<UIText>();
 
-            LoadingManager.Load(1);
+            //Prelaod textures
+            Block block = new();
+            JumpPad jumpPad = new();
+            WalkEnemy walkEnemy = new();
+            JumpingEnemy jumpingEnemy = new();
+            RandomEnemy randomEnemy = new();
+            FlyingEnemy flyingEnemy = new();
+            Player player = new();
+            Portal portal = new();
         }
 
         public override void Update(float delta)
         {
-            if (Raylib.IsKeyPressed(KeyboardKey.One))
+            if (!hasStartedGame)
             {
-                LoadingManager.Load(1);
+                if (Raylib.IsKeyPressed(KeyboardKey.Space))
+                {
+                    hasStartedGame = true;
+
+                    uIText.text = "";
+                    LoadingManager.Load(1);
+                }
             }
-            if (Raylib.IsKeyPressed(KeyboardKey.Two))
+            else
             {
-                LoadingManager.Load(2);
-            }
-            if (Raylib.IsKeyPressed(KeyboardKey.Three))
-            {
-                LoadingManager.Load(3);
+                if (Raylib.IsKeyPressed(KeyboardKey.One))
+                {
+                    LoadingManager.Load(1);
+                }
+                if (Raylib.IsKeyPressed(KeyboardKey.Two))
+                {
+                    LoadingManager.Load(2);
+                }
+                if (Raylib.IsKeyPressed(KeyboardKey.Three))
+                {
+                    LoadingManager.Load(3);
+                }
             }
         }
 

@@ -24,7 +24,7 @@ namespace Engine
         }
         public virtual void OnInnit()
         {
-            
+
         }
         public string PrintStats()
         {
@@ -48,6 +48,17 @@ namespace Engine
                 if (c.GetType() == typeof(T))
                 {
                     return (T)c;
+                }
+            }
+            return null;
+        }
+        public T? GetComponentInterface<T>() where T : class
+        {
+            foreach (Component c in components)
+            {
+                if (c is T)
+                {
+                    return c as T;
                 }
             }
             return null;
