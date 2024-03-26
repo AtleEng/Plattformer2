@@ -28,7 +28,8 @@ namespace CoreEngine
         static float oldTime = 0;
         static float newTime = 0;
 
-        public static double physicsUpdateTimeStep = 0.1; // 0.1 seconds
+        public static double maxPhysicsTimeStep = 0.1; // 0.1 seconds
+        public static double physicsTimeStep = 0.1;
         public static void Start()
         {
             AddSystem<ScriptSystem>();
@@ -63,11 +64,18 @@ namespace CoreEngine
             GetAllActiveEntities(currentScene);
 
             // Uppdate all the systems in the right order
+            // TODO nu hoppar den över physics om delta är för hög inte jättebra lösning men fungerar
             for (int i = 0; i < systems.Count; i++)
             {
-                systems[i].Update(delta);
+                if (!(delta > 0.02f && (i == 1 || i == 2)))
+                {
+                    systems[i].Update(delta);
+                }
+                else
+                {
+                    //System.Console.WriteLine(delta);
+                }
             }
-
 
             UpdateChildren(currentScene.transform);
             // Add and remove games entities
