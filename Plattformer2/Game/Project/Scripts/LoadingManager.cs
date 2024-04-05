@@ -5,7 +5,23 @@ namespace Engine
 {
     public static class LoadingManager
     {
-        static public int currentLevel = 0;
+        static int currentLevel = 0;
+        static public int CurrentLevel
+        {
+            get
+            {
+                return currentLevel;
+            }
+        }
+        static Vector2 levelSize = Vector2.Zero;
+        static public Vector2 LevelSize
+        {
+            get
+            {
+                return levelSize;
+            }
+        }
+
         static string prePath = @"Game\Project\Levels\";
         static Dictionary<int, Type> entitysInLevel = new()
         {
@@ -57,6 +73,7 @@ namespace Engine
                 int[,]? level = LoadLevel(levels[i]);
                 if (level != null)
                 {
+                    levelSize = new(level.GetLength(1), level.GetLength(0));
                     SpawEntitiesInLevel(level);
                 }
             }
@@ -107,7 +124,7 @@ namespace Engine
                         if (entity != null)
                         {
                             levelEntities.Add(entity);
-                            Vector2 spawPos = new Vector2(y - level.GetLength(1) / 2, x - level.GetLength(0) / 2);
+                            Vector2 spawPos = new Vector2(y, x);
 
                             EntityManager.SpawnEntity(entity, spawPos);
                         }

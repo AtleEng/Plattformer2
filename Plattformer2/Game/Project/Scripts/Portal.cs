@@ -10,16 +10,15 @@ namespace Engine
     [Serializable]
     public class PortalScript : Component, IScript
     {
-        public PortalScript() { }
-
-        float jumpForce = -25;
-
-        Animator anim;
+        Animator? anim;
 
         public override void Start()
         {
             anim = gameEntity.GetComponent<Animator>();
-            anim.PlayAnimation("Idle");
+            if (anim != null)
+            {
+                anim.PlayAnimation("Idle");
+            }
         }
 
         public override void OnTrigger(Collider other)
@@ -27,7 +26,8 @@ namespace Engine
             PlayerMovement? player = other.gameEntity.GetComponent<PlayerMovement>();
             if (player != null)
             {
-                LoadingManager.Load(LoadingManager.currentLevel + 1);
+                EntityManager.DestroyEntity(player.gameEntity);
+                LoadingManager.Load(LoadingManager.CurrentLevel + 1);
             }
         }
 

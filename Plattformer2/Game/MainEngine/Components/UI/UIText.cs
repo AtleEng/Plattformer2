@@ -11,7 +11,7 @@ namespace UI
         public int Layer { get; set; }
 
         public string text = "Enter text here:";
-        public int fontSize = 30;
+        public int fontSize = 50;
         public Color color = Color.White;
         public Vector2 pos = new();
         public void Render()

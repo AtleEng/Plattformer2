@@ -1,8 +1,4 @@
 using System.Numerics;
-using System.Collections.Generic;
-using Raylib_cs;
-using Animation;
-using Physics;
 using UI;
 
 namespace Engine
@@ -15,14 +11,41 @@ namespace Engine
             name = "GameManager";
 
             Camera.zoom = 1.6f;
-            UIText uIText = new()
+
+            UIText startUIText = new()
             {
                 Layer = 10,
-                text = "Press space to start"
+                text = "Press space to start",
+                pos = new(150, 350)
             };
-            AddComponent<UIText>(uIText);
+            TextBox startText = new(startUIText);
+            EntityManager.SpawnEntity(startText, Vector2.Zero, Vector2.One, this.transform);
 
-            AddComponent<GameManagerScript>(new GameManagerScript());
+            UIText levelUIText = new()
+            {
+                Layer = 10,
+                text = "Level",
+                pos = new(10, 10)
+            };
+            TextBox levelText = new(levelUIText)
+            {
+                isActive = false
+            };
+            EntityManager.SpawnEntity(levelText, Vector2.Zero, Vector2.One, this.transform);
+
+            UIText endUIText = new()
+            {
+                Layer = 10,
+                text = "You won!\nPress ECS to return to menu",
+                pos = new(150, 350)
+            };
+            TextBox endText = new(endUIText)
+            {
+                isActive = false
+            };
+            EntityManager.SpawnEntity(endText, Vector2.Zero, Vector2.One, this.transform);
+
+            AddComponent<GameManagerScript>(new GameManagerScript(startUIText, levelUIText));
         }
     }
 }

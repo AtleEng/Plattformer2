@@ -10,51 +10,91 @@ namespace Engine
 {
     public class GameManagerScript : Component, IScript
     {
-        UIText uIText;
-        bool hasStartedGame;
+        UIText startText;
+        UIText levelText;
+
+        GameState currentState = GameState.startMenu;
+
+        public GameManagerScript(UIText startText, UIText levelText)
+        {
+            this.startText = startText;
+            this.levelText = levelText;
+        }
         public override void Start()
         {
-            uIText = gameEntity.GetComponent<UIText>();
 
-            //Prelaod textures
-            Block block = new();
-            JumpPad jumpPad = new();
-            WalkEnemy walkEnemy = new();
-            JumpingEnemy jumpingEnemy = new();
-            RandomEnemy randomEnemy = new();
-            FlyingEnemy flyingEnemy = new();
-            Player player = new();
-            Portal portal = new();
         }
 
         public override void Update(float delta)
         {
-            if (!hasStartedGame)
+            if (currentState == GameState.startMenu)
             {
-                if (Raylib.IsKeyPressed(KeyboardKey.Space))
-                {
-                    hasStartedGame = true;
-
-                    uIText.text = "";
-                    LoadingManager.Load(1);
-                }
+                StartMenu();
+            }
+            else if (currentState == GameState.startLevel)
+            {
+                StartLevel();
+            }
+            else if (currentState == GameState.playing)
+            {
+                Playing();
+            }
+            else if (currentState == GameState.wonLevel)
+            {
+                WonLevel();
+            }
+            else if (currentState == GameState.wonGame)
+            {
+                WonGame();
             }
             else
             {
-                if (Raylib.IsKeyPressed(KeyboardKey.One))
-                {
-                    LoadingManager.Load(1);
-                }
-                if (Raylib.IsKeyPressed(KeyboardKey.Two))
-                {
-                    LoadingManager.Load(2);
-                }
-                if (Raylib.IsKeyPressed(KeyboardKey.Three))
-                {
-                    LoadingManager.Load(3);
-                }
+                Died();
             }
         }
 
+        void StartMenu()
+        {
+            if (Raylib.IsKeyPressed(KeyboardKey.Space))
+            {
+                currentState = GameState.startLevel;
+                EntityManager.DestroyEntity(startText.gameEntity);
+                levelText.gameEntity.isActive = true;
+
+                ChangeLevel(1);
+            }
+        }
+        void StartLevel()
+        {
+            levelText.text = $"Level {LoadingManager.CurrentLevel}";
+
+            currentState = GameState.playing;
+        }
+        void Playing()
+        {
+
+        }
+        void WonLevel()
+        {
+
+        }
+        void WonGame()
+        {
+
+        }
+        void Died()
+        {
+
+        }
+
+        void ChangeLevel(int i)
+        {
+            LoadingManager.Load(i);
+        }
+
+        enum GameState
+        {
+            startMenu, startLevel, playing, wonLevel, wonGame, died
+        }
     }
 }
