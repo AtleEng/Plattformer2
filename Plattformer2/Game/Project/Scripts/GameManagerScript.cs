@@ -5,6 +5,7 @@ using Engine;
 using Physics;
 using Animation;
 using UI;
+using CoreEngine;
 
 namespace Engine
 {
@@ -16,6 +17,9 @@ namespace Engine
         UIText endText;
 
         GameState currentState = GameState.startMenu;
+
+        float buttonQuitTime = 1f;
+        float quitTimer;
 
         public GameManagerScript(UIText startText, UIText levelText, UIText endText)
         {
@@ -32,7 +36,7 @@ namespace Engine
         {
             if (currentState == GameState.startMenu)
             {
-                StartMenu();
+                StartMenu(delta);
             }
             else if (currentState == GameState.startLevel)
             {
@@ -56,7 +60,7 @@ namespace Engine
             }
         }
 
-        void StartMenu()
+        void StartMenu(float delta)
         {
             startText.gameEntity.isActive = true;
             levelText.gameEntity.isActive = false;
@@ -70,7 +74,14 @@ namespace Engine
 
                 ChangeLevel(1);
             }
-            System.Console.WriteLine("!!!");
+            if (Raylib.IsKeyDown(KeyboardKey.Escape))
+            {
+                quitTimer += delta;
+                if (quitTimer >= buttonQuitTime)
+                {
+                    Core.shouldClose = true;
+                }
+            }
         }
         void StartLevel()
         {

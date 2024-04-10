@@ -79,30 +79,31 @@ namespace Graphics
             {
                 IRendable? rB = gameEntity.GetComponentInterface<IRendable>();
                 if (rB != null) { allRenderObjects.Add(rB); }
+                /*
+                                Collider? collider = gameEntity.GetComponent<Collider>();
+                                if (collider != null)
+                                {
+                                    Vector2 p = WorldSpace.ConvertToCameraPosition(gameEntity.transform.worldPosition + collider.offset);
+                                    Vector2 s = WorldSpace.ConvertToCameraSize(gameEntity.transform.worldSize * collider.scale);
 
-                Collider? collider = gameEntity.GetComponent<Collider>();
-                if (collider != null)
-                {
-                    Vector2 p = WorldSpace.ConvertToCameraPosition(gameEntity.transform.worldPosition + collider.offset);
-                    Vector2 s = WorldSpace.ConvertToCameraSize(gameEntity.transform.worldSize * collider.scale);
+                                    Rectangle colliderBox = new Rectangle(
+                                    (int)p.X - (int)(s.X / 2), (int)p.Y - (int)(s.Y / 2), //pos
+                                    (int)s.X, (int)s.Y //size
+                                    );
+                                    Color color = new Color(55, 255, 55, 250);
+                                    if (collider.isTrigger)
+                                    {
+                                        color = new Color(55, 55, 255, 250);
+                                        if (collider.isColliding)
+                                        {
+                                            color = new Color(255, 55, 255, 250);
+                                        }
+                                    }
+                                    else if (collider.isColliding) { color = new Color(255, 55, 55, 250); }
 
-                    Rectangle colliderBox = new Rectangle(
-                    (int)p.X - (int)(s.X / 2), (int)p.Y - (int)(s.Y / 2), //pos
-                    (int)s.X, (int)s.Y //size
-                    );
-                    Color color = new Color(55, 255, 55, 250);
-                    if (collider.isTrigger)
-                    {
-                        color = new Color(55, 55, 255, 250);
-                        if (collider.isColliding)
-                        {
-                            color = new Color(255, 55, 255, 250);
-                        }
-                    }
-                    else if (collider.isColliding) { color = new Color(255, 55, 55, 250); }
-
-                    Raylib.DrawRectangleRec(colliderBox, color);
-                }
+                                    Raylib.DrawRectangleRec(colliderBox, color);
+                                }
+                            */
             }
             allRenderObjects.Sort((a, b) => a.Layer.CompareTo(b.Layer));
             foreach (IRendable rB in allRenderObjects)

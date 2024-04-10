@@ -14,8 +14,8 @@ namespace Engine
             UIText startUIText = new()
             {
                 Layer = 10,
-                text = "Press space to start",
-                pos = new(150, 350)
+                text = "-Press space to start\n\n\n\n\n\n-Hold down ECS to quit",
+                pos = new(150, 500)
             };
             TextBox startText = new(startUIText);
             EntityManager.SpawnEntity(startText, Vector2.Zero, Vector2.One, this.transform);
