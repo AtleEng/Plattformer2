@@ -16,6 +16,7 @@ namespace Engine
         public virtual void Update(float delta) { }
         public virtual void OnDestroy() { }
         public virtual void OnTrigger(Collider other) { }
+        public virtual void OnCollision(Collider other) { }
 
         public virtual string PrintStats() { return ""; }
     }

@@ -64,6 +64,8 @@ namespace Physics
                                 }
                                 else if (physicsBody != null)
                                 {
+                                    collider.gameEntity.OnCollision(otherCollider);
+                                    //otherCollider.gameEntity.OnCollision(collider);
                                     collidersAndArea.Add(new(otherCollider, area));
                                 }
                             }

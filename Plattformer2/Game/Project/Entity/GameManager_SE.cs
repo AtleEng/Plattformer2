@@ -5,7 +5,6 @@ namespace Engine
 {
     public class GameManager : GameEntity
     {
-
         public GameManager()
         {
             name = "GameManager";
@@ -27,16 +26,13 @@ namespace Engine
                 text = "Level",
                 pos = new(10, 10)
             };
-            TextBox levelText = new(levelUIText)
-            {
-                isActive = false
-            };
+            TextBox levelText = new(levelUIText);
             EntityManager.SpawnEntity(levelText, Vector2.Zero, Vector2.One, this.transform);
 
             UIText endUIText = new()
             {
                 Layer = 10,
-                text = "You won!\nPress ECS to return to menu",
+                text = "You won!\n\n\nPress ECS to return to menu",
                 pos = new(150, 350)
             };
             TextBox endText = new(endUIText)
@@ -45,7 +41,7 @@ namespace Engine
             };
             EntityManager.SpawnEntity(endText, Vector2.Zero, Vector2.One, this.transform);
 
-            AddComponent<GameManagerScript>(new GameManagerScript(startUIText, levelUIText));
+            AddComponent<GameManagerScript>(new GameManagerScript(startUIText, levelUIText, endUIText));
         }
     }
 }

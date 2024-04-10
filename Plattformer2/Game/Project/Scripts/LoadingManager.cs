@@ -5,6 +5,7 @@ namespace Engine
 {
     public static class LoadingManager
     {
+        static GameEntity empty = new();
         static int currentLevel = 0;
         static public int CurrentLevel
         {
@@ -35,11 +36,12 @@ namespace Engine
             {9, typeof(Portal)},
         };
 
-        static Dictionary<int, string> levels = new()
+        public static Dictionary<int, string> levels = new()
         {
             {1, "Level1"},
             {2, "Level2"},
-            {3, "Level3"}
+            {3, "Level3"},
+            {4, "Level4"}
         };
         static List<GameEntity> levelEntities = new();
 
@@ -48,6 +50,12 @@ namespace Engine
             WriteIndented = true,
             PropertyNameCaseInsensitive = true
         };
+
+        public static void StartLoading()
+        {
+            empty.name = "Level";
+            EntityManager.SpawnEntity(empty);
+        }
 
         public static void SaveLevel(string path, int[,] level)
         {
@@ -126,7 +134,7 @@ namespace Engine
                             levelEntities.Add(entity);
                             Vector2 spawPos = new Vector2(y, x);
 
-                            EntityManager.SpawnEntity(entity, spawPos);
+                            EntityManager.SpawnEntity(entity, spawPos, Vector2.One, empty.transform);
                         }
                     }
                 }

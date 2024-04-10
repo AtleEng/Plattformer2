@@ -47,5 +47,17 @@ namespace Engine
             }
             Core.entitiesToRemove.Add(entity);
         }
+
+        static public T? GetGameEntity<T>() where T : GameEntity
+        {
+            foreach (GameEntity g in Core.gameEntities)
+            {
+                if (g.GetType() == typeof(T))
+                {
+                    return g as T;
+                }
+            }
+            return null;
+        }
     }
 }

@@ -13,16 +13,19 @@ namespace Engine
         UIText startText;
         UIText levelText;
 
+        UIText endText;
+
         GameState currentState = GameState.startMenu;
 
-        public GameManagerScript(UIText startText, UIText levelText)
+        public GameManagerScript(UIText startText, UIText levelText, UIText endText)
         {
             this.startText = startText;
             this.levelText = levelText;
+            this.endText = endText;
         }
         public override void Start()
         {
-
+            LoadingManager.StartLoading();
         }
 
         public override void Update(float delta)
@@ -55,14 +58,19 @@ namespace Engine
 
         void StartMenu()
         {
+            startText.gameEntity.isActive = true;
+            levelText.gameEntity.isActive = false;
+            endText.gameEntity.isActive = false;
             if (Raylib.IsKeyPressed(KeyboardKey.Space))
             {
                 currentState = GameState.startLevel;
-                EntityManager.DestroyEntity(startText.gameEntity);
+                startText.gameEntity.isActive = false;
                 levelText.gameEntity.isActive = true;
+                endText.gameEntity.isActive = false;
 
                 ChangeLevel(1);
             }
+            System.Console.WriteLine("!!!");
         }
         void StartLevel()
         {
@@ -72,7 +80,19 @@ namespace Engine
         }
         void Playing()
         {
+            if (Raylib.IsKeyPressed(KeyboardKey.R))
+            {
+                currentState = GameState.startLevel;
+                startText.gameEntity.isActive = false;
+                levelText.gameEntity.isActive = true;
 
+                ChangeLevel(LoadingManager.CurrentLevel);
+            }
+            if (Raylib.IsKeyPressed(KeyboardKey.Escape))
+            {
+                ChangeLevel(0);
+                currentState = GameState.startMenu;
+            }
         }
         void WonLevel()
         {
@@ -80,16 +100,30 @@ namespace Engine
         }
         void WonGame()
         {
-
+            startText.gameEntity.isActive = false;
+            levelText.gameEntity.isActive = false;
+            endText.gameEntity.isActive = true;
+            if (Raylib.IsKeyPressed(KeyboardKey.Escape))
+            {
+                currentState = GameState.startMenu;
+            }
         }
         void Died()
         {
 
         }
 
-        void ChangeLevel(int i)
+        public void ChangeLevel(int i)
         {
             LoadingManager.Load(i);
+            if (i <= LoadingManager.levels.Count)
+            {
+                currentState = GameState.startLevel;
+            }
+            else
+            {
+                currentState = GameState.wonGame;
+            }
         }
 
         enum GameState

@@ -24,8 +24,6 @@ namespace Engine
             float maxX = LoadingManager.LevelSize.X - 1 - WindowSettings.gameScreenWidth / (Camera.zoom * WorldSpace.pixelsPerUnit * 2);
             float maxY = LoadingManager.LevelSize.Y - 1 - WindowSettings.gameScreenHeight / (Camera.zoom * WorldSpace.pixelsPerUnit * 2);
 
-            //System.Console.WriteLine(LoadingManager.LevelSize.X);
-            System.Console.WriteLine($"{minX}, {maxX}");
             Camera.position.X = Raymath.Lerp(Camera.position.X, player.worldPosition.X + offset.X, delta * smoothing);
             Camera.position.Y = Raymath.Lerp(Camera.position.Y, player.worldPosition.Y + offset.Y, delta * smoothing);
 

@@ -57,12 +57,17 @@ namespace Engine
         Animator anim;
         PlayerStates playerState = PlayerStates.idle;
 
+        GameManagerScript gM;
+
         public override void Start()
         {
             pB = gameEntity.GetComponent<PhysicsBody>();
             anim = gameEntity.GetComponent<Animator>();
             sprite = gameEntity.GetComponent<Sprite>();
             collider = gameEntity.GetComponent<Collider>();
+
+            GameManager gameManager = EntityManager.GetGameEntity<GameManager>();
+            gM = gameManager.GetComponent<GameManagerScript>();
         }
 
         void HandleAnimation()
@@ -251,6 +256,14 @@ namespace Engine
             {
                 wallJumpTimer = wallJumpTime;
                 isWallJumping = false;
+            }
+        }
+
+        public override void OnCollision(Collider other)
+        {
+            if (other.gameEntity is IKill)
+            {
+                gM.ChangeLevel(LoadingManager.CurrentLevel);
             }
         }
         public enum PlayerStates

@@ -22,6 +22,13 @@ namespace Engine
                 component.OnTrigger(other);
             }
         }
+        public void OnCollision(Collider other)
+        {
+            foreach (Component component in components)
+            {
+                component.OnCollision(other);
+            }
+        }
         public virtual void OnInnit()
         {
 
@@ -30,7 +37,7 @@ namespace Engine
         {
             return $"isActive: {isActive}- -transform:{transform.position},{transform.size}-";
         }
-        public bool HasComponent<T>()
+        public bool HasComponent<T>() where T : Component
         {
             foreach (Component c in components)
             {

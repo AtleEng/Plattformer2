@@ -6,7 +6,7 @@ using Physics;
 
 namespace Engine
 {
-    public class JumpingEnemy : GameEntity
+    public class JumpingEnemy : GameEntity, IKill
     {
         static Texture2D texture;
         public JumpingEnemy()

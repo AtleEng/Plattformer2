@@ -7,10 +7,11 @@ using Animation;
 
 namespace Engine
 {
-    [Serializable]
     public class PortalScript : Component, IScript
     {
         Animator? anim;
+
+        GameManagerScript gM;
 
         public override void Start()
         {
@@ -19,6 +20,9 @@ namespace Engine
             {
                 anim.PlayAnimation("Idle");
             }
+
+            GameManager gameManager = EntityManager.GetGameEntity<GameManager>();
+            gM = gameManager.GetComponent<GameManagerScript>();
         }
 
         public override void OnTrigger(Collider other)
@@ -27,7 +31,7 @@ namespace Engine
             if (player != null)
             {
                 EntityManager.DestroyEntity(player.gameEntity);
-                LoadingManager.Load(LoadingManager.CurrentLevel + 1);
+                gM.ChangeLevel(LoadingManager.CurrentLevel + 1);
             }
         }
 

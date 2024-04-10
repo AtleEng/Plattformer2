@@ -7,7 +7,6 @@ using Animation;
 
 namespace Engine
 {
-    [Serializable]
     public class EnemyAIBase : Component, IScript
     {
         public List<EnemyBehevior> beheviors = new();
