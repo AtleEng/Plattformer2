@@ -29,6 +29,25 @@ namespace Engine
             TextBox levelText = new(levelUIText);
             EntityManager.SpawnEntity(levelText, Vector2.Zero, Vector2.One, this.transform);
 
+            UIText timerUIText = new()
+            {
+                Layer = 10,
+                text = "Time:",
+                pos = new(950, 10)
+            };
+            TextBox timerText = new(timerUIText);
+            EntityManager.SpawnEntity(timerText, Vector2.Zero, Vector2.One, this.transform);
+
+            UIText tutorialUIText = new()
+            {
+                Layer = 10,
+                text = "-Press a/d to move left/right\n\n\n-Press space to jump (hold for higher jumps)\n\n\n-Press ecs to exit to menu",
+                pos = new(10, 650),
+                fontSize = 40
+            };
+            TextBox tutorialText = new(tutorialUIText);
+            EntityManager.SpawnEntity(tutorialText, Vector2.Zero, Vector2.One, this.transform);
+
             UIText endUIText = new()
             {
                 Layer = 10,
@@ -41,7 +60,7 @@ namespace Engine
             };
             EntityManager.SpawnEntity(endText, Vector2.Zero, Vector2.One, this.transform);
 
-            AddComponent<GameManagerScript>(new GameManagerScript(startUIText, levelUIText, endUIText));
+            AddComponent<GameManagerScript>(new GameManagerScript(startUIText, levelUIText, timerUIText, tutorialUIText, endUIText));
         }
     }
 }

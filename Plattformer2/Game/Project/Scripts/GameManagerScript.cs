@@ -13,18 +13,23 @@ namespace Engine
     {
         UIText startText;
         UIText levelText;
-
+        UIText timerText;
+        UIText tutorialText;
         UIText endText;
 
         GameState currentState = GameState.startMenu;
 
+        float currentPlayTime;
+
         float buttonQuitTime = 1f;
         float quitTimer;
 
-        public GameManagerScript(UIText startText, UIText levelText, UIText endText)
+        public GameManagerScript(UIText startText, UIText levelText, UIText timerText, UIText tutorialText, UIText endText)
         {
             this.startText = startText;
             this.levelText = levelText;
+            this.timerText = timerText;
+            this.tutorialText = tutorialText;
             this.endText = endText;
         }
         public override void Start()
@@ -44,7 +49,7 @@ namespace Engine
             }
             else if (currentState == GameState.playing)
             {
-                Playing();
+                Playing(delta);
             }
             else if (currentState == GameState.wonLevel)
             {
@@ -64,12 +69,16 @@ namespace Engine
         {
             startText.gameEntity.isActive = true;
             levelText.gameEntity.isActive = false;
+            timerText.gameEntity.isActive = false;
+            tutorialText.gameEntity.isActive = false;
             endText.gameEntity.isActive = false;
             if (Raylib.IsKeyPressed(KeyboardKey.Space))
             {
                 currentState = GameState.startLevel;
+
                 startText.gameEntity.isActive = false;
                 levelText.gameEntity.isActive = true;
+                timerText.gameEntity.isActive = true;
                 endText.gameEntity.isActive = false;
 
                 ChangeLevel(1);
@@ -86,16 +95,28 @@ namespace Engine
         void StartLevel()
         {
             levelText.text = $"Level {LoadingManager.CurrentLevel}";
+            if (LoadingManager.CurrentLevel == 1)
+            {
+                tutorialText.gameEntity.isActive = true;
+            }
+            else
+            {
+                tutorialText.gameEntity.isActive = false;
+            }
 
             currentState = GameState.playing;
         }
-        void Playing()
+        void Playing(float delta)
         {
+            currentPlayTime += delta;
+            string s = currentPlayTime.ToString("0.00");
+            timerText.text = $"{s}";
             if (Raylib.IsKeyPressed(KeyboardKey.R))
             {
                 currentState = GameState.startLevel;
                 startText.gameEntity.isActive = false;
                 levelText.gameEntity.isActive = true;
+                timerText.gameEntity.isActive = true;
 
                 ChangeLevel(LoadingManager.CurrentLevel);
             }
