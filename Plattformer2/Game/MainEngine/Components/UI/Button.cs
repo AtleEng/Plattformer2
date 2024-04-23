@@ -6,11 +6,9 @@ using Engine;
 
 namespace UI
 {
-    [Serializable]
+    //this is not used so I wont explain it
     public class Button : Component, IScript
     {
-        public Button() { }
-
         Action OnKilcked;
         public bool isHovering;
         public Button(Action KlickAction)

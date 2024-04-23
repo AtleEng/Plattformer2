@@ -64,7 +64,7 @@ namespace CoreEngine
             GetAllActiveEntities(currentScene);
 
             // Uppdate all the systems in the right order
-            // TODO nu hoppar den över physics om delta är för hög inte jättebra lösning men fungerar
+            // TODO nu hoppar den över physics och collision om delta är för hög inte jättebra lösning men fungerar
             for (int i = 0; i < systems.Count; i++)
             {
                 if (!(delta > 0.02f && (i == 1 || i == 2)))

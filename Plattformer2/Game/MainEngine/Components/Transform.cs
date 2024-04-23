@@ -4,8 +4,10 @@ using Physics;
 
 namespace Engine
 {
+    //Transform is the class that handle position, size and parent system
     public class Transform
     {
+        //Constructor
         public Transform(Transform parent, List<Transform> children, Vector2 position, Vector2 size)
         {
             this.parent = parent;
@@ -13,8 +15,9 @@ namespace Engine
             this.position = position;
             this.size = size;
         }
+        //The transforms entity
         public GameEntity gameEntity;
-
+    
         public Vector2 position;
         public Vector2 worldPosition = Vector2.Zero;
 
