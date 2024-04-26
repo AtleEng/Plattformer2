@@ -17,7 +17,7 @@ namespace UI
         }
         public override void Update(float delta)
         {
-            Vector2 mPos = WorldSpace.GetVirtualMousePos();
+            Vector2 mPos = WorldSpace.GetGameMousePos();
             if (Raylib.CheckCollisionPointRec
                 (mPos, new Rectangle(gameEntity.transform.worldPosition.X - gameEntity.transform.worldSize.X / 2,
                 gameEntity.transform.worldPosition.Y - gameEntity.transform.worldSize.Y / 2,

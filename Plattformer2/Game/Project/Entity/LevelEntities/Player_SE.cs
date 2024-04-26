@@ -9,6 +9,7 @@ namespace Engine
     public class Player : GameEntity
     {
         static Texture2D texture;
+        //Add all diffrent components
         public Player()
         {
             name = "Player";

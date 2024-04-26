@@ -5,6 +5,7 @@ namespace Engine
 {
     public class GameManager : GameEntity
     {
+        //Add all diffrent components
         public GameManager()
         {
             name = "GameManager";

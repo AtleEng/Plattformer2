@@ -5,24 +5,25 @@ using Engine;
 
 namespace Physics
 {
-    public class PhysicsSystem : GameSystem
+    public class PhysicsSystem : GameSystem //Handle physics
     {
         public override void Update(float delta)
         {
-            foreach (GameEntity gameEntity in Core.activeGameEntities)
+            foreach (GameEntity gameEntity in Core.activeGameEntities) //loop all entitys
             {
-                PhysicsBody? physicsBody = gameEntity.GetComponent<PhysicsBody>();
+                PhysicsBody? physicsBody = gameEntity.GetComponent<PhysicsBody>(); //Look if it has physicsBody
 
-                if (physicsBody != null)
+                if (physicsBody != null) //check if it has one
                 {
                     UpdatePhysics(physicsBody, delta);
-                    Core.UpdateChildren(gameEntity.transform.parent);
+                    Core.UpdateChildren(gameEntity.transform.parent);// update transform
                 }
             }
         }
+        //Handle acceleration, velocity, position and drag
         void UpdatePhysics(PhysicsBody pB, float delta)
         {
-            if (pB.physicsType == PhysicsBody.PhysicsType.staticType)
+            if (pB.physicsType == PhysicsBody.PhysicsType.staticType) //use static for checks
             {
                 return;
             }
@@ -30,25 +31,13 @@ namespace Physics
             pB.velocity.X *= 1 - pB.dragX * delta;
             pB.velocity.Y *= 1 - pB.dragY * delta;
 
-            pB.acceleration += pB.Gravity * delta * 60;
+            pB.acceleration += pB.Gravity * delta * 60; //calc gravity
 
-            pB.velocity += pB.acceleration * delta;
+            pB.velocity += pB.acceleration * delta; //calc velocity from acceleration
 
-            pB.gameEntity.transform.position += pB.velocity * delta;
+            pB.gameEntity.transform.position += pB.velocity * delta; // calc position from velocity
 
-            pB.acceleration = Vector2.Zero;
-        }
-        public static class PhysicsSettings
-        {
-            public static bool[,] collisionMatrix = new bool[4, 4]
-            {
-            //true = collide / false = ignore collision
-            //player ground check enemy
-            { false, true, false, true}, //player
-            { true, false, true, true}, //ground
-            { false, true, false, false}, //check
-            { false, true, false, false} //enemy
-            };
+            pB.acceleration = Vector2.Zero; //Reset acceleration
         }
     }
 }

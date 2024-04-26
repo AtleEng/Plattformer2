@@ -10,6 +10,7 @@ namespace Engine
     public class Portal : GameEntity
     {
         static Texture2D texture;
+        //Add all diffrent components
         public Portal()
         {
             if (texture.Id == 0)

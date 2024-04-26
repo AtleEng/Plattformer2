@@ -9,6 +9,7 @@ namespace Engine
     public class Block : GameEntity
     {
         static Texture2D texture;
+        //Add all diffrent components
         public Block()
         {
             if (texture.Id == 0)

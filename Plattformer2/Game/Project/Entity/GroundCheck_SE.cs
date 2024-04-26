@@ -4,6 +4,7 @@ namespace Engine
 {
     public class Check : GameEntity
     {
+        //Add all diffrent components
         public Check(int colliderLayer)
         {
             name = "Check";

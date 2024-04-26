@@ -9,6 +9,7 @@ namespace Engine
     public class JumpingEnemy : GameEntity, IKill
     {
         static Texture2D texture;
+        //Add all diffrent components
         public JumpingEnemy()
         {
             if (texture.Id == 0)
@@ -62,8 +63,8 @@ namespace Engine
 
 
             EnemyAIBase enemyAI = new();
-            enemyAI.beheviors.Add(new EnemyRun(30, wallCheck.GetComponent<Collider>(), null, physicsBody));
-            enemyAI.beheviors.Add(new EnemyJump(15, 0.1f, groundCheck.GetComponent<Collider>(), physicsBody));
+            enemyAI.behaviors.Add(new EnemyRun(30, wallCheck.GetComponent<Collider>(), null, physicsBody));
+            enemyAI.behaviors.Add(new EnemyJump(15, 0.1f, groundCheck.GetComponent<Collider>(), physicsBody));
 
             AddComponent<EnemyAIBase>(enemyAI);
         }

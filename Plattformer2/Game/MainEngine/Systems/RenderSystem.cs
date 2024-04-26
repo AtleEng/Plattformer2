@@ -8,9 +8,11 @@ using Physics;
 
 namespace Graphics
 {
+    //System that handle all diffrent render (sprite, text....)
     public class RenderSystem : GameSystem
     {
-        public float scale;
+        public float scale; //gameScreen scale
+        //offest
         int offsetX;
         int offsetY;
 
@@ -23,6 +25,7 @@ namespace Graphics
 
         public override void Start()
         {
+            //set all window things
             System.Console.WriteLine("Innit window");
             Raylib.SetConfigFlags(ConfigFlags.ResizableWindow);
             Raylib.SetConfigFlags(ConfigFlags.VSyncHint);
@@ -36,16 +39,17 @@ namespace Graphics
 
             target = Raylib.LoadRenderTexture(WindowSettings.gameScreenWidth, WindowSettings.gameScreenHeight);
             SetValuesOfWindow();
-
         }
         public override void Update(float delta)
         {
+            //If window is change recalc all window values
             if (Raylib.IsWindowResized())
             {
                 SetValuesOfWindow();
             }
 
             Raylib.BeginTextureMode(target);
+            //Background color
             Raylib.ClearBackground(new Color(41, 189, 193, 255));
             //Render all sprites
             RenderAll();
@@ -53,8 +57,10 @@ namespace Graphics
             Raylib.EndTextureMode();
 
             Raylib.BeginDrawing();
-            Raylib.ClearBackground(new Color(69, 43, 63, 255));
 
+            //Bar color
+            Raylib.ClearBackground(new Color(69, 43, 63, 255));
+            //draw the texture with all things on
             Raylib.DrawTexturePro(target.Texture,
     new Rectangle(0.0f, 0.0f, (float)target.Texture.Width, (float)-target.Texture.Height),
     new Rectangle(offsetX, offsetY, gameScreenWidth * scale, gameScreenHeight * scale),
@@ -62,7 +68,7 @@ namespace Graphics
 
             Raylib.EndDrawing();
 
-            if (Core.shouldClose)
+            if (Core.shouldClose) // close logic
             {
                 Raylib.UnloadRenderTexture(target);
                 Raylib.CloseWindow();
@@ -73,79 +79,45 @@ namespace Graphics
                 Core.shouldClose = true;
             }
         }
-        void RenderAll()
+        void RenderAll() //Used to render all IRender
         {
             foreach (GameEntity gameEntity in Core.activeGameEntities)
             {
-                IRendable? rB = gameEntity.GetComponentInterface<IRendable>();
-                if (rB != null) { allRenderObjects.Add(rB); }
-                /*
-                                Collider? collider = gameEntity.GetComponent<Collider>();
-                                if (collider != null)
-                                {
-                                    Vector2 p = WorldSpace.ConvertToCameraPosition(gameEntity.transform.worldPosition + collider.offset);
-                                    Vector2 s = WorldSpace.ConvertToCameraSize(gameEntity.transform.worldSize * collider.scale);
-
-                                    Rectangle colliderBox = new Rectangle(
-                                    (int)p.X - (int)(s.X / 2), (int)p.Y - (int)(s.Y / 2), //pos
-                                    (int)s.X, (int)s.Y //size
-                                    );
-                                    Color color = new Color(55, 255, 55, 250);
-                                    if (collider.isTrigger)
-                                    {
-                                        color = new Color(55, 55, 255, 250);
-                                        if (collider.isColliding)
-                                        {
-                                            color = new Color(255, 55, 255, 250);
-                                        }
-                                    }
-                                    else if (collider.isColliding) { color = new Color(255, 55, 55, 250); }
-
-                                    Raylib.DrawRectangleRec(colliderBox, color);
-                                }
-                            */
+                IRendable? r = gameEntity.GetComponentInterface<IRendable>(); // get all active IRendables
+                if (r != null) { allRenderObjects.Add(r); } // add to list
             }
-            allRenderObjects.Sort((a, b) => a.Layer.CompareTo(b.Layer));
-            foreach (IRendable rB in allRenderObjects)
+            allRenderObjects.Sort((a, b) => a.Layer.CompareTo(b.Layer)); // sort by layer
+            foreach (IRendable rB in allRenderObjects) //loop all IRendables
             {
-                rB.Render();
+                rB.Render(); //call its Render method
             }
-            allRenderObjects.Clear();
+            allRenderObjects.Clear(); //clear list for next update
         }
-        public void AddRenderObject(IRendable rB)
-        {
-            allRenderObjects.Add(rB);
-            //allRenderObjects.Sort((a, b) => a.layer.CompareTo(b.layer));
-        }
-        public void RemoveSprite(IRendable rB)
-        {
-            allRenderObjects.Remove(rB);
-        }
-        void SetValuesOfWindow()
+        void SetValuesOfWindow() //set all settings for the window
         {
             gameScreenWidth = WindowSettings.gameScreenWidth;
             gameScreenHeight = WindowSettings.gameScreenHeight;
 
-            float screenAspectRatio = (float)Raylib.GetScreenWidth() / Raylib.GetScreenHeight();
-            float gameAspectRatio = gameScreenWidth / gameScreenHeight;
+            float screenAspectRatio = (float)Raylib.GetScreenWidth() / Raylib.GetScreenHeight(); //Get screen ratio
+            float gameAspectRatio = gameScreenWidth / gameScreenHeight; // calc aspectRatio
 
             if (screenAspectRatio > gameAspectRatio)
             {
-                // Window is wider than the game screen
+                // Window is wider than the game screen => fix so gameWindow match aspektRatio
                 scale = Raylib.GetScreenHeight() / gameScreenHeight;
                 offsetX = (int)((Raylib.GetScreenWidth() - (gameScreenWidth * scale)) * 0.5f);
                 offsetY = 0;
             }
             else
             {
-                // Window is taller than the game screen
+                // Window is taller than the game screen => fix so gameWindow match aspektRatio
                 scale = (float)Raylib.GetScreenWidth() / gameScreenWidth;
                 offsetX = 0;
                 offsetY = (int)((Raylib.GetScreenHeight() - (gameScreenHeight * scale)) * 0.5f);
             }
         }
 
-        void DisplayGrid()
+        void DisplayGrid() //Creates a grid (for debugging)
         {
             int gridSize = 100;
             Vector2 spX = WorldSpace.ConvertToCameraPosition(new Vector2(gridSize, 0));

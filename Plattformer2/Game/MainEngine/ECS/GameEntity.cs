@@ -59,7 +59,7 @@ namespace Engine
             }
             return null;
         }
-        public T? GetComponentInterface<T>() where T : class
+        public T? GetComponentInterface<T>() where T : class //Get a Interface from entity
         {
             foreach (Component c in components)
             {
@@ -70,12 +70,12 @@ namespace Engine
             }
             return null;
         }
-        public void AddComponent<T>(Component component) where T : Component
+        public void AddComponent<T>(Component component) where T : Component //method to add components to entity
         {
             component.gameEntity = this;
             components.Add(component);
         }
-        public void RemoveComponent<T>()
+        public void RemoveComponent<T>()//method to remove component from entity
         {
             foreach (Component c in components)
             {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Engine;
 using Physics;
 using Animation;
-public class EnemyJump : EnemyBehevior
+public class EnemyJump : EnemyBehavior
 {
     //Normal jumping
     float jumpForce = 0;
@@ -21,20 +21,21 @@ public class EnemyJump : EnemyBehevior
         this.groundCheck = groundCheck;
         this.pB = pB;
     }
-    public override void BeheviorUpdate(float delta)
+    public override void BehaviorUpdate(float delta)
     {
-        if (groundCheck.isColliding)
+        if (groundCheck.isColliding) //If the enemy is on the ground
         {
             enemyBase.isGrounded = true;
 
+            //This timer tracks the cooldown between jumps
             jumpTime += delta;
-            if (jumpTime >= jumpTimer)
+            if (jumpTime >= jumpTimer) //when the cooldown is done, jump!
             {
                 jumpTime = 0;
                 pB.velocity.Y = -jumpForce;
             }
         }
-        else
+        else //isnt on the ground
         {
             enemyBase.isGrounded = false;
         }

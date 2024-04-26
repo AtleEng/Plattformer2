@@ -34,11 +34,13 @@ namespace Engine
         }
         public override void Start()
         {
+            //Starts the loading manager
             LoadingManager.StartLoading();
         }
 
         public override void Update(float delta)
         {
+            //State handler
             if (currentState == GameState.startMenu)
             {
                 StartMenu(delta);
@@ -67,11 +69,13 @@ namespace Engine
 
         void StartMenu(float delta)
         {
+            //Set which texts should be displayed
             startText.gameEntity.isActive = true;
             levelText.gameEntity.isActive = false;
             timerText.gameEntity.isActive = false;
             tutorialText.gameEntity.isActive = false;
             endText.gameEntity.isActive = false;
+            //If space is pressed then start the game
             if (Raylib.IsKeyPressed(KeyboardKey.Space))
             {
                 currentState = GameState.startLevel;
@@ -83,7 +87,7 @@ namespace Engine
 
                 ChangeLevel(1);
             }
-            if (Raylib.IsKeyDown(KeyboardKey.Escape))
+            if (Raylib.IsKeyDown(KeyboardKey.Escape)) //If escaped is holded down quit
             {
                 quitTimer += delta;
                 if (quitTimer >= buttonQuitTime)
@@ -91,10 +95,16 @@ namespace Engine
                     Core.shouldClose = true;
                 }
             }
+            else //restet the timer
+            {
+                quitTimer = 0;
+            }
         }
         void StartLevel()
         {
+            //Display the current level number
             levelText.text = $"Level {LoadingManager.CurrentLevel}";
+            //Only show instructions at first level
             if (LoadingManager.CurrentLevel == 1)
             {
                 tutorialText.gameEntity.isActive = true;
@@ -103,14 +113,16 @@ namespace Engine
             {
                 tutorialText.gameEntity.isActive = false;
             }
-
+            //Change state to playing
             currentState = GameState.playing;
         }
         void Playing(float delta)
         {
+            //Timer
             currentPlayTime += delta;
             string s = currentPlayTime.ToString("0.00");
             timerText.text = $"{s}";
+            //Restart level if R is pressed
             if (Raylib.IsKeyPressed(KeyboardKey.R))
             {
                 currentState = GameState.startLevel;
@@ -120,32 +132,34 @@ namespace Engine
 
                 ChangeLevel(LoadingManager.CurrentLevel);
             }
+            //Go back to MainMenu if ESC is pressed
             if (Raylib.IsKeyPressed(KeyboardKey.Escape))
             {
                 ChangeLevel(0);
                 currentState = GameState.startMenu;
             }
         }
-        void WonLevel()
+        void WonLevel() //Didnt add anything here
         {
 
         }
-        void WonGame()
+        void WonGame() //When all levels are complited
         {
             startText.gameEntity.isActive = false;
             levelText.gameEntity.isActive = false;
             endText.gameEntity.isActive = true;
+            //press escape to go to MainMenu
             if (Raylib.IsKeyPressed(KeyboardKey.Escape))
             {
                 currentState = GameState.startMenu;
             }
         }
-        void Died()
+        void Died() //Didnt add anything here, you just respawn
         {
 
         }
 
-        public void ChangeLevel(int i)
+        public void ChangeLevel(int i) //Changes level and get the correct state
         {
             LoadingManager.Load(i);
             if (i <= LoadingManager.levels.Count)
@@ -158,7 +172,7 @@ namespace Engine
             }
         }
 
-        enum GameState
+        enum GameState //The diffrent gameStates, wonLevel and died could in the future be used to create effects when winning/losing
         {
             startMenu, startLevel, playing, wonLevel, wonGame, died
         }

@@ -7,20 +7,19 @@ using Animation;
 
 namespace Engine
 {
-    [Serializable]
     public class JumpPadScript : Component, IScript
     {
-        public JumpPadScript() { }
-
-        float jumpForce = -25;
+        float jumpForce = -25; //Upwards force
 
         Animator anim;
 
         public override void Start()
         {
+            //cache entitys animator
             anim = gameEntity.GetComponent<Animator>();
         }
 
+        //if a dynimic physicsBody enter the JumpPads triggerZone, shoot it upwards by jumpForce and play animation
         public override void OnTrigger(Collider other)
         {
             PhysicsBody? pB = other.gameEntity.GetComponent<PhysicsBody>();

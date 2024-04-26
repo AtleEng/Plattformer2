@@ -5,32 +5,33 @@ using Graphics;
 
 namespace Engine
 {
+    //Utils class for world and screen space
     public static class WorldSpace
     {
         public static int pixelsPerUnit = 40;
-        static RenderSystem RenderSystem => (RenderSystem)Core.systems[Core.systems.Count - 1];
-        public static Vector2 GetVirtualMousePos() // Uppdatera virtuella musen (låst till spelfönstret)
+        static RenderSystem RenderSystem => (RenderSystem)Core.systems[Core.systems.Count - 1]; //cache the renderSystem
+        public static Vector2 GetGameMousePos() // Update the game mouse (It is bound to the game and the center of screen is 0,0)
         {
-            // Virtual mouse position
-            Vector2 virtualMousePosition;
+            // Game mouse position
+            Vector2 gameMousePosition;
 
             // Get the mouse position
             Vector2 mousePosition = Raylib.GetMousePosition();
 
-            // Calculate the virtual mouse position adjusted to the game window
-            virtualMousePosition.X = (mousePosition.X - (Raylib.GetScreenWidth() - (WindowSettings.gameScreenWidth * RenderSystem.scale)) * 0.5f) / RenderSystem.scale;
-            virtualMousePosition.Y = (mousePosition.Y - (Raylib.GetScreenHeight() - (WindowSettings.gameScreenHeight * RenderSystem.scale)) * 0.5f) / RenderSystem.scale;
+            // Calculate the game mouse position adjusted to the game window
+            gameMousePosition.X = (mousePosition.X - (Raylib.GetScreenWidth() - (WindowSettings.gameScreenWidth * RenderSystem.scale)) * 0.5f) / RenderSystem.scale;
+            gameMousePosition.Y = (mousePosition.Y - (Raylib.GetScreenHeight() - (WindowSettings.gameScreenHeight * RenderSystem.scale)) * 0.5f) / RenderSystem.scale;
 
-            // Clamp the virtual mouse position to the game window boundaries
-            virtualMousePosition.X = Math.Clamp(virtualMousePosition.X, 0f, WindowSettings.gameScreenWidth);
-            virtualMousePosition.Y = Math.Clamp(virtualMousePosition.Y, 0f, WindowSettings.gameScreenHeight);
+            // Clamp the game mouse position to the game window boundaries
+            gameMousePosition.X = Math.Clamp(gameMousePosition.X, 0f, WindowSettings.gameScreenWidth);
+            gameMousePosition.Y = Math.Clamp(gameMousePosition.Y, 0f, WindowSettings.gameScreenHeight);
 
-            virtualMousePosition.X = (virtualMousePosition.X - WindowSettings.gameScreenWidth / 2) / Camera.zoom / pixelsPerUnit;
-            virtualMousePosition.Y = (virtualMousePosition.Y - WindowSettings.gameScreenHeight / 2) / Camera.zoom / pixelsPerUnit;
+            gameMousePosition.X = (gameMousePosition.X - WindowSettings.gameScreenWidth / 2) / Camera.zoom / pixelsPerUnit;
+            gameMousePosition.Y = (gameMousePosition.Y - WindowSettings.gameScreenHeight / 2) / Camera.zoom / pixelsPerUnit;
 
-            virtualMousePosition += Camera.position;
+            gameMousePosition += Camera.position;
 
-            return virtualMousePosition;
+            return gameMousePosition;
         }
 
         public static int BaseUnitsToPixels(float units)
@@ -43,14 +44,14 @@ namespace Engine
             float units = (float)pixels / pixelsPerUnit;
             return units;
         }
-        public static Vector2 ConvertToCameraPosition(Vector2 v)
+        public static Vector2 ConvertToCameraPosition(Vector2 v) //Gets the screenPosition of a vector in worldPosition
         {
             v.X = (v.X - Camera.position.X) * pixelsPerUnit * Camera.zoom + WindowSettings.gameScreenWidth / 2;
             v.Y = (v.Y - Camera.position.Y) * pixelsPerUnit * Camera.zoom + WindowSettings.gameScreenHeight / 2;
 
             return v;
         }
-        public static Vector2 ConvertToCameraSize(Vector2 v)
+        public static Vector2 ConvertToCameraSize(Vector2 v) //Gets the screenSize of a vector in worldSize
         {
             return v * Camera.zoom * pixelsPerUnit;
         }

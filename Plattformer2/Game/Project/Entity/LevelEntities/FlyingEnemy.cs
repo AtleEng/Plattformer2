@@ -9,6 +9,7 @@ namespace Engine
     public class FlyingEnemy : GameEntity, IKill
     {
         static Texture2D texture;
+        //Add all diffrent components
         public FlyingEnemy()
         {
             if (texture.Id == 0)
@@ -56,7 +57,7 @@ namespace Engine
             EntityManager.SpawnEntity(wallCheck, new Vector2(-0.3f, 0f), new Vector2(0.4f, 0.4f), this.transform);
 
             EnemyAIBase enemyAI = new();
-            enemyAI.beheviors.Add(new EnemyRun(15, wallCheck.GetComponent<Collider>(), null, physicsBody));
+            enemyAI.behaviors.Add(new EnemyRun(15, wallCheck.GetComponent<Collider>(), null, physicsBody));
             AddComponent<EnemyAIBase>(enemyAI);
         }
     }

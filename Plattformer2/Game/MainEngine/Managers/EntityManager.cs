@@ -5,9 +5,10 @@ using Engine;
 
 namespace Engine
 {
-    //handles all entities for the components
+    //handles all entities for the components to use
     public static class EntityManager
     {
+        //Spaw in a entity in the world
         public static void SpawnEntity(GameEntity entity) { SpawnEntity(entity, Vector2.Zero); }
         public static void SpawnEntity(GameEntity entity, Vector2 position) { SpawnEntity(entity, position, Vector2.One); }
         public static void SpawnEntity(GameEntity entity, Vector2 position, Vector2 size) { SpawnEntity(entity, position, size, null); }
@@ -35,20 +36,21 @@ namespace Engine
             }
             Core.entitiesToAdd.Add(entity);
         }
+        //The way to remove entitys
         public static void DestroyEntity(GameEntity entity)
         {
-            foreach (Component component in entity.components)
+            foreach (Component component in entity.components) //Call OnDestroy to all components
             {
                 component.OnDestroy();
             }
-            foreach (Transform child in entity.transform.children)
+            foreach (Transform child in entity.transform.children) //Destroy all children of entity
             {
                 DestroyEntity(child.gameEntity);
             }
-            Core.entitiesToRemove.Add(entity);
+            Core.entitiesToRemove.Add(entity); //Finally remove entity
         }
 
-        static public T? GetGameEntity<T>() where T : GameEntity
+        static public T? GetGameEntity<T>() where T : GameEntity //Gets first entity of matching type
         {
             foreach (GameEntity g in Core.gameEntities)
             {

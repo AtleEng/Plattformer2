@@ -7,11 +7,12 @@ using Animation;
 
 namespace Engine
 {
+    //This class controll all diffrent enemy behaviors
     public class EnemyAIBase : Component, IScript
     {
-        public List<EnemyBehevior> beheviors = new();
+        public List<EnemyBehavior> behaviors = new(); //All enemys diffrent AI
 
-        public bool isGrounded = true;
+        public bool isGrounded = true; //Check to see if enemy is on the ground
 
         //Physics
         float maxVelocityX = 10;
@@ -25,22 +26,24 @@ namespace Engine
         EnemyStates enemyStates = EnemyStates.idle;
         public override void Start()
         {
+            //Cache components
             pB = gameEntity.GetComponent<PhysicsBody>();
             anim = gameEntity.GetComponent<Animator>();
             sprite = gameEntity.GetComponent<Sprite>();
-
-            foreach (EnemyBehevior behevior in beheviors)
+            //Get all behaviors a refrences to this class
+            foreach (EnemyBehavior behavior in behaviors)
             {
-                behevior.enemyBase = this;
+                behavior.enemyBase = this;
             }
         }
         public override void Update(float delta)
         {
-            foreach (EnemyBehevior behevior in beheviors)
+            //Update all behaviors
+            foreach (EnemyBehavior behavior in behaviors)
             {
-                behevior.BeheviorUpdate(delta);
+                behavior.BehaviorUpdate(delta);
             }
-
+            //animation handling
             if (isGrounded)
             {
                 if (pB.velocity.X != 0)
@@ -79,6 +82,7 @@ namespace Engine
                     }
                 }
             }
+            //Turn the sprite in the direction of movement
             if (pB.velocity.X > 0)
             {
                 sprite.isFlipedX = false;
@@ -88,6 +92,7 @@ namespace Engine
                 sprite.isFlipedX = true;
             }
 
+            //Cap the velocity
             pB.velocity.X = Math.Clamp(pB.velocity.X, -maxVelocityX, maxVelocityX);
             pB.velocity.Y = Math.Clamp(pB.velocity.Y, -maxVelocityY, maxVelocityY);
         }
@@ -97,9 +102,9 @@ namespace Engine
         }
     }
 
-    public abstract class EnemyBehevior
+    public abstract class EnemyBehavior //base class for behaviors
     {
         public EnemyAIBase enemyBase;
-        public virtual void BeheviorUpdate(float delta) { }
+        public virtual void BehaviorUpdate(float delta) { }
     }
 }

@@ -4,6 +4,7 @@ namespace Engine
 {
     public class TextBox : GameEntity
     {
+        //Add all diffrent components
         public TextBox()
         {
             name = "TextBox";
@@ -15,7 +16,7 @@ namespace Engine
                 pos = new(10, 10)
             };
         }
-        public TextBox(UIText text): this()
+        public TextBox(UIText text) : this()
         {
             AddComponent<UIText>(text);
         }

@@ -10,6 +10,7 @@ namespace Engine
     public class JumpPad : GameEntity
     {
         static Texture2D texture;
+        //Add all diffrent components
         public JumpPad()
         {
             if (texture.Id == 0)
