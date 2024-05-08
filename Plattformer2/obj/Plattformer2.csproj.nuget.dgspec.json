@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\atle.engelbrektsson\\Documents\\C#\\Plattformer2\\Plattformer2\\Plattformer2.csproj": {}
+    "C:\\Users\\atle.engelbrektsson\\Documents\\C#\\Plattformer2\\Plattformer2\\Plattformer2.csproj": {}
   },
   "projects": {
-    "c:\\Users\\atle.engelbrektsson\\Documents\\C#\\Plattformer2\\Plattformer2\\Plattformer2.csproj": {
+    "C:\\Users\\atle.engelbrektsson\\Documents\\C#\\Plattformer2\\Plattformer2\\Plattformer2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\atle.engelbrektsson\\Documents\\C#\\Plattformer2\\Plattformer2\\Plattformer2.csproj",
+        "projectUniqueName": "C:\\Users\\atle.engelbrektsson\\Documents\\C#\\Plattformer2\\Plattformer2\\Plattformer2.csproj",
         "projectName": "Plattformer2",
-        "projectPath": "c:\\Users\\atle.engelbrektsson\\Documents\\C#\\Plattformer2\\Plattformer2\\Plattformer2.csproj",
+        "projectPath": "C:\\Users\\atle.engelbrektsson\\Documents\\C#\\Plattformer2\\Plattformer2\\Plattformer2.csproj",
         "packagesPath": "C:\\Users\\atle.engelbrektsson\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\atle.engelbrektsson\\Documents\\C#\\Plattformer2\\Plattformer2\\obj\\",
+        "outputPath": "C:\\Users\\atle.engelbrektsson\\Documents\\C#\\Plattformer2\\Plattformer2\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\atle.engelbrektsson\\AppData\\Roaming\\NuGet\\NuGet.Config"

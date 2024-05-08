@@ -9,6 +9,7 @@ namespace Engine
 {
     public class PlayerMovement : Component, IScript
     {
+        #region Variables
         #region XMovement
         float moveSpeed = 100;
         float airSpeed = 15;
@@ -19,7 +20,6 @@ namespace Engine
         #endregion
 
         #region NormalJump
-        private float innitJumpForce = 10;
         private float jumpForce = 10;
 
         private float jumpTime = 0.3f;
@@ -58,24 +58,27 @@ namespace Engine
         PlayerStates playerState = PlayerStates.idle;
 
         GameManagerScript gM;
-
+        #endregion
         public override void Start()
         {
+            //Get all components script needs
             pB = gameEntity.GetComponent<PhysicsBody>();
             anim = gameEntity.GetComponent<Animator>();
             sprite = gameEntity.GetComponent<Sprite>();
             collider = gameEntity.GetComponent<Collider>();
 
+            //Get the gameManager script
             GameManager gameManager = EntityManager.GetGameEntity<GameManager>();
             gM = gameManager.GetComponent<GameManagerScript>();
         }
 
-        void HandleAnimation()
+        void HandleAnimation() //This method handles animation states
         {
             if (groundCheck.isColliding)
             {
                 if (pB.velocity.X != 0)
                 {
+                    //if player is on the ground and moving
                     if (playerState != PlayerStates.running)
                     {
                         playerState = PlayerStates.running;
@@ -84,6 +87,7 @@ namespace Engine
                 }
                 else
                 {
+                    //if player is on the ground and standing still
                     if (playerState != PlayerStates.idle)
                     {
                         playerState = PlayerStates.idle;
@@ -95,6 +99,7 @@ namespace Engine
             {
                 if (pB.velocity.Y < 0)
                 {
+                    //if player is on the ground and pressing space
                     if (playerState != PlayerStates.jump)
                     {
                         playerState = PlayerStates.jump;
@@ -103,6 +108,7 @@ namespace Engine
                 }
                 else
                 {
+                    //if player is on the wall and moving
                     if (wallCheck.isColliding && moveInput != 0)
                     {
                         if (playerState != PlayerStates.wallGliding)
@@ -112,6 +118,7 @@ namespace Engine
                     }
                     else
                     {
+                        //Else the player falls
                         if (playerState != PlayerStates.fall)
                         {
                             playerState = PlayerStates.fall;
@@ -123,29 +130,36 @@ namespace Engine
         }
         public override void Update(float delta)
         {
-            HandleAnimation();
+            HandleAnimation(); //set the correct animation
 
-            JumpInputs(delta);
+            JumpInputs(delta); //Get input for jumping
 
-            if (isWallJumping)
+            if (isWallJumping) //If walljumping is true then walljump
             {
-                WallJump(delta);
+                WallJump(delta); // Controll walljump
             }
             else
             {
-                XInput();
+                XInput(); //If not walljumping the move correctly
             }
-            xMovement(delta);
-            Jump(delta);
+            xMovement(delta); //Controll x Movement
+            Jump(delta); // Controll jump
+
             if (groundCheck.isColliding)
             {
                 //Hanterar spelarens hastighet
                 if (Math.Abs(pB.velocity.X) < 1) { pB.velocity.X = 0; }
             }
+            //clamp velocity of player
             pB.velocity.X = Math.Clamp(pB.velocity.X, -maxVelocityX, maxVelocityX);
             pB.velocity.Y = Math.Clamp(pB.velocity.Y, -maxVelocityY, maxVelocityY);
+
+            if (gameEntity.transform.position.Y > LoadingManager.LevelSize.Y + 3)
+            {
+                LoadingManager.Load(LoadingManager.CurrentLevel);
+            }
         }
-        void XInput()
+        void XInput() //get the x movement input
         {
             moveInput = 0;
             if (Raylib.IsKeyDown(KeyboardKey.D))
@@ -160,15 +174,15 @@ namespace Engine
         void JumpInputs(float delta)
         {
             //manage jump buffer
-            if (Raylib.IsKeyPressed(KeyboardKey.Space))
+            if (Raylib.IsKeyPressed(KeyboardKey.Space))// set the input buffer timer
             {
                 jumpBufferLengthCounter = jumpBufferLength;
             }
-            else
+            else //Count down the timer
             {
                 jumpBufferLengthCounter -= delta;
             }
-
+            //Slow down player if wallgliding
             if (playerState == PlayerStates.wallGliding)
             {
                 pB.dragY = 20;
@@ -181,61 +195,62 @@ namespace Engine
             }
             else
             {
+                //set correct drag
                 pB.dragY = 0;
-                //manage hangtime
-                if (groundCheck.isColliding)
+
+                if (groundCheck.isColliding) //if player is on the ground set hangtime (Makes you able to jump a short while after leaving the ground)
                 {
                     hangTimeCounter = hangTime;
                 }
-                else
+                else //count down timer
                 {
                     hangTimeCounter -= delta;
                 }
             }
-            if (jumpBufferLengthCounter >= 0 && (hangTimeCounter > 0 || playerState == PlayerStates.wallGliding))
+            if (jumpBufferLengthCounter >= 0 && (hangTimeCounter > 0 || playerState == PlayerStates.wallGliding)) //Check so player should be able to jump
             {
                 isJumping = true;
                 jumpTimeCounter = jumpTime;
                 jumpBufferLengthCounter = 0;
                 hangTimeCounter = 0;
             }
-
+            //Check if holding down jumpbutton => contine adding velocity
             if (Raylib.IsKeyDown(KeyboardKey.Space))
             {
-                if (jumpTimeCounter > 0)
+                if (jumpTimeCounter > 0) //JumpTiem timer
                 {
                     jumpTimeCounter -= delta;
                 }
-                else
+                else //When jumpTime is done
                 {
-                    isJumping = false;
+                    isJumping = false; //Stop jumping
                 }
             }
-            else
+            else //If jumpButton is up
             {
-                isJumping = false;
+                isJumping = false; //Stop Jumping
             }
         }
         void xMovement(float delta)
         {
-            if (groundCheck.isColliding || isWallJumping)
+            if (groundCheck.isColliding || isWallJumping) //If walking on the ground
             {
                 pB.dragX = groundDrag;
                 pB.velocity.X += moveInput * moveSpeed * delta;
             }
-            else
+            else //If moving in the air
             {
                 pB.dragX = airDrag;
                 pB.velocity.X += moveInput * airSpeed * delta;
             }
-
-            if (moveInput > 0)
+            //Flip the sprite and collider
+            if (moveInput > 0) //If moving right
             {
                 wallCheck.gameEntity.transform.position.X = 0.3f;
 
                 sprite.isFlipedX = false;
             }
-            else if (moveInput < 0)
+            else if (moveInput < 0) //if moving left
             {
                 wallCheck.gameEntity.transform.position.X = -0.3f;
 
@@ -244,12 +259,12 @@ namespace Engine
         }
         void Jump(float delta)
         {
-            if (isJumping)
+            if (isJumping) //Add force if jumping
             {
                 pB.velocity.Y = -jumpForce * delta * 60;
             }
         }
-        void WallJump(float delta)
+        void WallJump(float delta) //Walljumping timer
         {
             wallJumpTimer -= delta;
             if (wallJumpTimer <= 0)
@@ -259,14 +274,14 @@ namespace Engine
             }
         }
 
-        public override void OnCollision(Collider other)
+        public override void OnCollision(Collider other) //Look if entity collide with a entity with IKill and if => restart level
         {
             if (other.gameEntity is IKill)
             {
                 gM.ChangeLevel(LoadingManager.CurrentLevel);
             }
         }
-        public enum PlayerStates
+        public enum PlayerStates //The diffrent states of the player 
         {
             idle, running, jump, fall, wallGliding
         }

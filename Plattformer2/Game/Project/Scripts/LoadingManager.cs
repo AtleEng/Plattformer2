@@ -33,6 +33,7 @@ namespace Engine
             {4, typeof(JumpingEnemy)},
             {5, typeof(RandomEnemy)},
             {6, typeof(FlyingEnemy)},
+            {7, typeof(KillZone)},
             {8, typeof(Player)},
             {9, typeof(Portal)},
         };
@@ -176,37 +177,37 @@ namespace Engine
         // Convert 2D array to jagged array (Because json is dumb)
         static int[][] ConvertToJaggedArray(int[,] array)
         {
-            int rows = array.GetLength(0);
-            int cols = array.GetLength(1);
+            int rows = array.GetLength(0); //Get int[this,] value
+            int cols = array.GetLength(1); //Get int[,that] value
 
-            int[][] jaggedArray = new int[rows][];
+            int[][] jaggedArray = new int[rows][]; //Create a jagged arry and set amount of rows
 
-            for (int x = 0; x < rows; x++)
+            for (int x = 0; x < rows; x++) //Loop all rows
             {
-                jaggedArray[x] = new int[cols];
-                for (int y = 0; y < cols; y++)
+                jaggedArray[x] = new int[cols]; //set columes
+                for (int y = 0; y < cols; y++) //Loop all columes
                 {
-                    jaggedArray[x][y] = array[x, y];
+                    jaggedArray[x][y] = array[x, y]; //Set all values of jagged array
                 }
             }
-            return jaggedArray;
+            return jaggedArray; //return jagged array
         }
         // Convert jagged array to 2D array (Because json is dumb)
         static int[,] ConvertTo2DArray(int[][] jaggedArray)
         {
-            int rows = jaggedArray.Length;
-            int cols = jaggedArray[0].Length;
+            int rows = jaggedArray.Length; //Get amount of rows from jagged array
+            int cols = jaggedArray[0].Length; //Get amount of columes from jagged array
 
-            int[,] array = new int[rows, cols];
+            int[,] array = new int[rows, cols]; //Create the 2d array
 
-            for (int x = 0; x < rows; x++)
+            for (int x = 0; x < rows; x++) //Loop all positions
             {
                 for (int y = 0; y < cols; y++)
                 {
-                    array[x, y] = jaggedArray[x][y];
+                    array[x, y] = jaggedArray[x][y]; //Set value at position
                 }
             }
-            return array;
+            return array; //return the 2d array
         }
     }
 }
