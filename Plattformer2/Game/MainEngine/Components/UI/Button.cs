@@ -11,25 +11,44 @@ namespace UI
     {
         Action OnKilcked;
         public bool isHovering;
-        public Button(Action KlickAction)
+
+
+        UIImage image;
+        public Color normalColor = Color.White;
+        public Color hoverColor = Color.Red;
+        public Button(Action KlickAction, UIImage image)
         {
             OnKilcked = KlickAction;
+            this.image = image;
         }
         public override void Update(float delta)
         {
-            Vector2 mPos = WorldSpace.GetGameMousePos();
+             // Get the screen position/size from the sprites world position/size
+            Vector2 p = gameEntity.transform.worldPosition;
+            Vector2 s = gameEntity.transform.worldSize;
+
+            //Calculate rectangle the sprite is rendered in from p and s
+            Rectangle destRec = new Rectangle(
+            (int)p.X - (int)(s.X / 2), (int)p.Y - (int)(s.Y / 2), //pos
+            (int)s.X, (int)s.Y //size
+            );
+
+            Vector2 mPos = WorldSpace.GetUIMousePos();
             if (Raylib.CheckCollisionPointRec
-                (mPos, new Rectangle(gameEntity.transform.worldPosition.X - gameEntity.transform.worldSize.X / 2,
-                gameEntity.transform.worldPosition.Y - gameEntity.transform.worldSize.Y / 2,
-                gameEntity.transform.worldSize.X, gameEntity.transform.worldSize.Y)))
+                (mPos, destRec))
             {
                 isHovering = true;
-                if (Raylib.IsMouseButtonDown(0))
+                image.colorTint = hoverColor;
+                if (Raylib.IsMouseButtonPressed(0))
                 {
                     OnKilcked();
                 }
             }
-            else { isHovering = false; }
+            else
+            {
+                isHovering = false;
+                image.colorTint = normalColor;
+            }
         }
     }
 }

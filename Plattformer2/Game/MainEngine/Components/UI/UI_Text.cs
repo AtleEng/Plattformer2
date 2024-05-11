@@ -10,7 +10,7 @@ namespace UI
     public class UIText : Component, IRendable
     {
         //Controll which layer the text is being redered at (lower layer behind higher layer)
-        public int Layer { get; set; }
+        public int Layer { get; set; } = 10;
         //the diplayed texts text
         public string text = "Enter text here:";
         //size of text

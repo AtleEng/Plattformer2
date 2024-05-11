@@ -59,9 +59,18 @@ namespace Engine
             {
                 isActive = false
             };
-            EntityManager.SpawnEntity(endText, Vector2.Zero, Vector2.One, this.transform);
+            EntityManager.SpawnEntity(endText, Vector2.Zero, Vector2.One, transform);
 
-            AddComponent<GameManagerScript>(new GameManagerScript(startUIText, levelUIText, timerUIText, tutorialUIText, endUIText));
+            GameManagerScript gM = new GameManagerScript(startUIText, levelUIText, timerUIText, tutorialUIText, endUIText);
+            AddComponent<GameManagerScript>(gM);
+
+            Action startAction = () => gM.StartGame();
+            ButtonObject startButton = new ButtonObject(startAction);
+            EntityManager.SpawnEntity(startButton, new Vector2(200, 650), new Vector2(300, 75), transform);
+
+            Action quitAction = () => gM.QuitGame();
+            ButtonObject quitButton = new ButtonObject(quitAction);
+            EntityManager.SpawnEntity(quitButton, new Vector2(200, 750), new Vector2(300, 75), transform);
         }
     }
 }

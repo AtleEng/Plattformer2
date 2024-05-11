@@ -172,6 +172,21 @@ namespace Engine
             }
         }
 
+        public void StartGame()
+        {
+            currentState = GameState.startLevel;
+
+            startText.gameEntity.isActive = false;
+            levelText.gameEntity.isActive = true;
+            timerText.gameEntity.isActive = true;
+            endText.gameEntity.isActive = false;
+
+            ChangeLevel(1);
+        }
+        public void QuitGame()
+        {
+            Core.shouldClose = true;
+        }
         enum GameState //The diffrent gameStates, wonLevel and died could in the future be used to create effects when winning/losing
         {
             startMenu, startLevel, playing, wonLevel, wonGame, died

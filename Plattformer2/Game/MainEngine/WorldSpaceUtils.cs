@@ -34,6 +34,24 @@ namespace Engine
             return gameMousePosition;
         }
 
+        public static Vector2 GetUIMousePos() // Update the game mouse (It is bound to the game and the center of screen is 0,0)
+        {
+            // Game mouse position
+            Vector2 uiMousePosition;
+
+            // Get the mouse position
+            Vector2 mousePosition = Raylib.GetMousePosition();
+
+            // Calculate the game mouse position adjusted to the game window
+            uiMousePosition.X = (mousePosition.X - (Raylib.GetScreenWidth() - (WindowSettings.gameScreenWidth * RenderSystem.scale)) * 0.5f) / RenderSystem.scale;
+            uiMousePosition.Y = (mousePosition.Y - (Raylib.GetScreenHeight() - (WindowSettings.gameScreenHeight * RenderSystem.scale)) * 0.5f) / RenderSystem.scale;
+
+            // Clamp the game mouse position to the game window boundaries
+            uiMousePosition.X = Math.Clamp(uiMousePosition.X, 0f, WindowSettings.gameScreenWidth);
+            uiMousePosition.Y = Math.Clamp(uiMousePosition.Y, 0f, WindowSettings.gameScreenHeight);
+
+            return uiMousePosition;
+        }
         public static int BaseUnitsToPixels(float units)
         {
             int pixels = (int)(units * pixelsPerUnit);

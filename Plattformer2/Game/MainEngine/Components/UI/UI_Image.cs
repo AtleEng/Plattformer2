@@ -3,11 +3,11 @@ using Raylib_cs;
 
 namespace Engine
 {
-    //Component used to display sprites in the game world
-    public class Sprite : Component, IRendable
+    //Component used to display sprites on the UI
+    public class UIImage : Component, IRendable
     {
         //Controll which layer sprite is being redered at (lower layer behind higher layer)
-        public int Layer { get; set; }
+        public int Layer { get; set; } = 10;
 
         //The spriteSheet, load from PNG
         public Texture2D spriteSheet;
@@ -51,8 +51,8 @@ namespace Engine
         public void Render()//What the sprite render call
         {
             // Get the screen position/size from the sprites world position/size
-            Vector2 p = WorldSpace.ConvertToCameraPosition(gameEntity.transform.worldPosition);
-            Vector2 s = WorldSpace.ConvertToCameraSize(gameEntity.transform.worldSize);
+            Vector2 p = gameEntity.transform.worldPosition;
+            Vector2 s = gameEntity.transform.worldSize;
 
             //Calculate rectangle the sprite is rendered in from p and s
             Rectangle destRec = new Rectangle(
@@ -91,10 +91,5 @@ namespace Engine
                 Raylib.DrawRectangleRec(destRec, colorTint);
             }
         }
-    }
-    public interface IRendable // interface that the renderSystem use to render diffrent components (like sprite or text)
-    {
-        public int Layer { get; set; }
-        public void Render();
     }
 }
