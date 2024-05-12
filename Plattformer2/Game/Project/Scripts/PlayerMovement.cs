@@ -57,6 +57,9 @@ namespace Engine
         Animator anim;
         PlayerStates playerState = PlayerStates.idle;
 
+        //Audio
+        Sound jumpSound = Raylib.LoadSound(@"Game\Project\Audio\cartoon-jump-6462.mp3");
+
         GameManagerScript gM;
         #endregion
         public override void Start()
@@ -145,14 +148,15 @@ namespace Engine
             xMovement(delta); //Controll x Movement
             Jump(delta); // Controll jump
 
+            //clamp velocity of player
+            pB.velocity.X = Math.Clamp(pB.velocity.X, -maxVelocityX, maxVelocityX);
+            pB.velocity.Y = Math.Clamp(pB.velocity.Y, -maxVelocityY, maxVelocityY);
+
             if (groundCheck.isColliding)
             {
                 //Hanterar spelarens hastighet
                 if (Math.Abs(pB.velocity.X) < 1) { pB.velocity.X = 0; }
             }
-            //clamp velocity of player
-            pB.velocity.X = Math.Clamp(pB.velocity.X, -maxVelocityX, maxVelocityX);
-            pB.velocity.Y = Math.Clamp(pB.velocity.Y, -maxVelocityY, maxVelocityY);
 
             if (gameEntity.transform.position.Y > LoadingManager.LevelSize.Y + 3)
             {
@@ -213,6 +217,7 @@ namespace Engine
                 jumpTimeCounter = jumpTime;
                 jumpBufferLengthCounter = 0;
                 hangTimeCounter = 0;
+                Raylib.PlaySound(jumpSound);
             }
             //Check if holding down jumpbutton => contine adding velocity
             if (Raylib.IsKeyDown(KeyboardKey.Space))

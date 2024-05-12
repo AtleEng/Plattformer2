@@ -9,6 +9,7 @@ namespace Engine
         public UIImage uIImage;
         public UIText uIText;
         public Button button;
+        
         //Add all diffrent components
         public ButtonObject(Action onKlick)
         {

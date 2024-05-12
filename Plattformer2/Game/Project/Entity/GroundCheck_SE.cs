@@ -19,7 +19,6 @@ namespace Engine
                 true, colliderLayer
             );
             AddComponent<Collider>(collider);
-            AddComponent<Sprite>(new Sprite());
         }
     }
 }

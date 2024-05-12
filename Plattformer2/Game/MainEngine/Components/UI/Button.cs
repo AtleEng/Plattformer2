@@ -12,10 +12,11 @@ namespace UI
         Action OnKilcked;
         public bool isHovering;
 
-
         UIImage image;
         public Color normalColor = Color.White;
         public Color hoverColor = Color.Red;
+
+        Sound sound = Raylib.LoadSound(@"Game\Project\Audio\metronome-85688.mp3");
         public Button(Action KlickAction, UIImage image)
         {
             OnKilcked = KlickAction;
@@ -41,6 +42,7 @@ namespace UI
                 image.colorTint = hoverColor;
                 if (Raylib.IsMouseButtonPressed(0))
                 {
+                    Raylib.PlaySound(sound);
                     OnKilcked();
                 }
             }

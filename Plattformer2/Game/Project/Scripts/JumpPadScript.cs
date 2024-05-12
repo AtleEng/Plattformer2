@@ -13,6 +13,7 @@ namespace Engine
 
         Animator anim;
 
+        Sound jumpSound = Raylib.LoadSound(@"Game\Project\Audio\boing-spring-mouth-harp-04-20-13-4-103346.mp3");
         public override void Start()
         {
             //cache entitys animator
@@ -29,6 +30,7 @@ namespace Engine
                 {
                     pB.velocity.Y = jumpForce;
                     anim.PlayAnimation("Jump");
+                    Raylib.PlaySound(jumpSound);
                 }
             }
         }

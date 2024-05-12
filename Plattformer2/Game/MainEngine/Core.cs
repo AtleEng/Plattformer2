@@ -45,6 +45,10 @@ namespace CoreEngine
             {
                 systems[i].Start();
             }
+            //Audio
+            Raylib.InitAudioDevice();
+            Raylib.SetMasterVolume(0.5f);
+
             rotEntity.OnInnit();
 
             //* Update all systems in the right order

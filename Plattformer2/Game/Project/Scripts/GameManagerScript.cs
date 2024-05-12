@@ -19,6 +19,8 @@ namespace Engine
 
         float currentPlayTime;
 
+        Music gameMusic = Raylib.LoadMusicStream(@"Game\Project\Audio\music.mp3");
+
         public GameManagerScript(UIText levelText, UIText timerText, UIText tutorialText)
         {
             this.levelText = levelText;
@@ -29,7 +31,10 @@ namespace Engine
         {
             //Starts the loading manager
             LoadingManager.StartLoading();
-
+        }
+        public override void OnDestroy()
+        {
+            Raylib.StopMusicStream(gameMusic);
         }
 
         public override void Update(float delta)
@@ -59,6 +64,12 @@ namespace Engine
             else
             {
                 Died();
+            }
+
+            Raylib.UpdateMusicStream(gameMusic);
+            if (!Raylib.IsMusicStreamPlaying(gameMusic))
+            {
+                Raylib.PlayMusicStream(gameMusic);
             }
         }
 
