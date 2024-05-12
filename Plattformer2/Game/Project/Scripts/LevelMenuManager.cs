@@ -38,7 +38,7 @@ namespace Engine
                     Action action = () => SpawnFilesButtons(allFiles[index]);
                     ButtonObject folderButton = new ButtonObject(action);
 
-                    EntityManager.SpawnEntity(folderButton, new Vector2(550, (100 * posIndex) + 50), new Vector2(300, 75), transform);
+                    EntityManager.SpawnEntity(folderButton, new Vector2(550, (100 * posIndex) + 50), new Vector2(300, 100), transform);
                     posIndex++;
                 }
             }
@@ -73,7 +73,7 @@ namespace Engine
 
                     levelButton.uIText.text = levelsDirectoryName;
 
-                    EntityManager.SpawnEntity(levelButton, new Vector2(900, (100 * posIndex) + 50), new Vector2(300, 75), transform);
+                    EntityManager.SpawnEntity(levelButton, new Vector2(900, (100 * posIndex) + 50), new Vector2(300, 100), transform);
                     levelButtons.Add(levelButton);
                     posIndex++;
                 }

@@ -9,12 +9,22 @@ namespace Engine
         public UIImage uIImage;
         public UIText uIText;
         public Button button;
-        
+
+        static Texture2D texture;
+
         //Add all diffrent components
         public ButtonObject(Action onKlick)
         {
             name = "Button";
-            uIImage = new UIImage();
+            if (texture.Id == 0)
+            {
+                texture = Raylib.LoadTexture(@"Game\Project\Images\Button.png");
+            }
+
+            uIImage = new UIImage
+            {
+                spriteSheet = texture
+            };
             AddComponent<UIImage>(uIImage);
 
             uIText = new UIText

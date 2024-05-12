@@ -17,7 +17,7 @@ namespace Engine
             Action editorAction = () => Core.ChangeRotEntity(new StartScene());
             ButtonObject editorButton = new ButtonObject(editorAction);
             editorButton.uIText.text = "Back";
-            EntityManager.SpawnEntity(editorButton, new Vector2(200, 750), new Vector2(300, 75), transform);
+            EntityManager.SpawnEntity(editorButton, new Vector2(175, 725), new Vector2(300, 100), transform);
         }
     }
 }
