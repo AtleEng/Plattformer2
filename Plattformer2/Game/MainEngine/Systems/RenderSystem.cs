@@ -84,7 +84,10 @@ namespace Graphics
             foreach (GameEntity gameEntity in Core.activeGameEntities)
             {
                 IRendable? r = gameEntity.GetComponentInterface<IRendable>(); // get all active IRendables
-                if (r != null) { allRenderObjects.Add(r); } // add to list
+                if (r != null)
+                {
+                    allRenderObjects.Add(r);// add to list
+                }
             }
             allRenderObjects.Sort((a, b) => a.Layer.CompareTo(b.Layer)); // sort by layer
             foreach (IRendable rB in allRenderObjects) //loop all IRendables

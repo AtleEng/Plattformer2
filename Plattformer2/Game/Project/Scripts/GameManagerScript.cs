@@ -11,39 +11,34 @@ namespace Engine
 {
     public class GameManagerScript : Component, IScript
     {
-        UIText startText;
         UIText levelText;
         UIText timerText;
         UIText tutorialText;
-        UIText endText;
 
-        GameState currentState = GameState.startMenu;
+        GameState currentState = GameState.startPlay;
 
         float currentPlayTime;
 
-        float buttonQuitTime = 1f;
-        float quitTimer;
-
-        public GameManagerScript(UIText startText, UIText levelText, UIText timerText, UIText tutorialText, UIText endText)
+        public GameManagerScript(UIText levelText, UIText timerText, UIText tutorialText)
         {
-            this.startText = startText;
             this.levelText = levelText;
             this.timerText = timerText;
             this.tutorialText = tutorialText;
-            this.endText = endText;
         }
         public override void Start()
         {
             //Starts the loading manager
             LoadingManager.StartLoading();
+
         }
 
         public override void Update(float delta)
         {
             //State handler
-            if (currentState == GameState.startMenu)
+            if (currentState == GameState.startPlay)
             {
-                StartMenu(delta);
+                ChangeLevel(1);
+                currentState = GameState.startLevel;
             }
             else if (currentState == GameState.startLevel)
             {
@@ -67,39 +62,7 @@ namespace Engine
             }
         }
 
-        void StartMenu(float delta)
-        {
-            //Set which texts should be displayed
-            startText.gameEntity.isActive = true;
-            levelText.gameEntity.isActive = false;
-            timerText.gameEntity.isActive = false;
-            tutorialText.gameEntity.isActive = false;
-            endText.gameEntity.isActive = false;
-            //If space is pressed then start the game
-            if (Raylib.IsKeyPressed(KeyboardKey.Space))
-            {
-                currentState = GameState.startLevel;
 
-                startText.gameEntity.isActive = false;
-                levelText.gameEntity.isActive = true;
-                timerText.gameEntity.isActive = true;
-                endText.gameEntity.isActive = false;
-
-                ChangeLevel(1);
-            }
-            if (Raylib.IsKeyDown(KeyboardKey.Escape)) //If escaped is holded down quit
-            {
-                quitTimer += delta;
-                if (quitTimer >= buttonQuitTime)
-                {
-                    Core.shouldClose = true;
-                }
-            }
-            else //restet the timer
-            {
-                quitTimer = 0;
-            }
-        }
         void StartLevel()
         {
             //Display the current level number
@@ -115,6 +78,7 @@ namespace Engine
             }
             //Change state to playing
             currentState = GameState.playing;
+
         }
         void Playing(float delta)
         {
@@ -126,7 +90,6 @@ namespace Engine
             if (Raylib.IsKeyPressed(KeyboardKey.R))
             {
                 currentState = GameState.startLevel;
-                startText.gameEntity.isActive = false;
                 levelText.gameEntity.isActive = true;
                 timerText.gameEntity.isActive = true;
 
@@ -135,8 +98,7 @@ namespace Engine
             //Go back to MainMenu if ESC is pressed
             if (Raylib.IsKeyPressed(KeyboardKey.Escape))
             {
-                ChangeLevel(0);
-                currentState = GameState.startMenu;
+                Core.ChangeRotEntity(new StartScene());
             }
         }
         void WonLevel() //Didnt add anything here
@@ -145,14 +107,7 @@ namespace Engine
         }
         void WonGame() //When all levels are complited
         {
-            startText.gameEntity.isActive = false;
-            levelText.gameEntity.isActive = false;
-            endText.gameEntity.isActive = true;
-            //press escape to go to MainMenu
-            if (Raylib.IsKeyPressed(KeyboardKey.Escape))
-            {
-                currentState = GameState.startMenu;
-            }
+            Core.ChangeRotEntity(new StartScene());
         }
         void Died() //Didnt add anything here, you just respawn
         {
@@ -172,24 +127,9 @@ namespace Engine
             }
         }
 
-        public void StartGame()
-        {
-            currentState = GameState.startLevel;
-
-            startText.gameEntity.isActive = false;
-            levelText.gameEntity.isActive = true;
-            timerText.gameEntity.isActive = true;
-            endText.gameEntity.isActive = false;
-
-            ChangeLevel(1);
-        }
-        public void QuitGame()
-        {
-            Core.shouldClose = true;
-        }
         enum GameState //The diffrent gameStates, wonLevel and died could in the future be used to create effects when winning/losing
         {
-            startMenu, startLevel, playing, wonLevel, wonGame, died
+            startPlay, startLevel, playing, wonLevel, died, wonGame
         }
     }
 }

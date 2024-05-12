@@ -15,7 +15,7 @@ namespace CoreEngine
     public static class Core
     {
         //All entitys in scene in child of this
-        public static GameEntity currentScene = new Scene();
+        public static GameEntity rotEntity = new StartScene();
         public static bool shouldClose; //If true the program closes
 
         static public List<GameEntity> gameEntities = new(); //All gameEntitys
@@ -45,7 +45,7 @@ namespace CoreEngine
             {
                 systems[i].Start();
             }
-            currentScene.OnInnit();
+            rotEntity.OnInnit();
 
             //* Update all systems in the right order
             while (shouldClose == false)
@@ -62,7 +62,7 @@ namespace CoreEngine
         {
             activeGameEntities.Clear(); //Reset it
 
-            GetAllActiveEntities(currentScene); //Refill the active entity list
+            GetAllActiveEntities(rotEntity); //Refill the active entity list
 
             // Uppdate all the systems in the right order
             // TODO nu hoppar den över physics och collision om delta är för hög inte jättebra lösning men fungerar
@@ -73,7 +73,7 @@ namespace CoreEngine
                     systems[i].Update(delta);
                 }
             }
-            UpdateChildren(currentScene.transform); //Update all transforms
+            UpdateChildren(rotEntity.transform); //Update all transforms
             // Add and remove games entities
             foreach (var entity in entitiesToAdd)
             {
@@ -94,7 +94,7 @@ namespace CoreEngine
             if (Raylib.IsKeyPressed(KeyboardKey.F3))
             {
                 //Console.Clear();
-                PrintEntityTree(currentScene, "", "");
+                PrintEntityTree(rotEntity, "", "");
             }
         }
         static public void UpdateChildren(Engine.Transform parent) //Updates the child transform to move and scale with the parent
@@ -161,19 +161,15 @@ namespace CoreEngine
 
             }
         }
-    }
-}
-
-namespace Engine
-{
-    //The entity all other entitys are children to
-    public class Scene : GameEntity
-    {
-        public override void OnInnit()
+        static public void ChangeRotEntity(GameEntity gameEntity)
         {
-            name = "Scene";
-
-            EntityManager.SpawnEntity(new GameManager(), Vector2.Zero);
+            EntityManager.DestroyEntity(rotEntity);
+            rotEntity = gameEntity;
+            rotEntity.OnInnit();
+        }
+        static public void QuitGame()
+        {
+            shouldClose = true;
         }
     }
 }

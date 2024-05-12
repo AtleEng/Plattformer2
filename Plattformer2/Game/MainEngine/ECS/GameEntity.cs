@@ -70,6 +70,38 @@ namespace Engine
             }
             return null;
         }
+        public List<T>? GetComponents<T>() where T : Component //Get a component of specified type if the entity has it
+        {
+            List<T> componetList = new();
+            foreach (Component c in components)
+            {
+                if (c.GetType() == typeof(T))
+                {
+                    componetList.Add(c as T);
+                }
+            }
+            if (componetList.Count > 0)
+            {
+                return componetList;
+            }
+            return null;
+        }
+        public List<T>? GetComponentsInterface<T>() where T : class //Get a Interface from entity
+        {
+            List<T> componetList = new();
+            foreach (Component c in components)
+            {
+                if (c is T)
+                {
+                    componetList.Add(c as T);
+                }
+            }
+            if (componetList.Count > 0)
+            {
+                return componetList;
+            }
+            return null;
+        }
         public void AddComponent<T>(Component component) where T : Component //method to add components to entity
         {
             component.gameEntity = this;

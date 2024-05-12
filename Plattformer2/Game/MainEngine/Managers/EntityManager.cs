@@ -25,7 +25,7 @@ namespace Engine
             }
             else
             {
-                entity.transform.parent = Core.currentScene.transform;
+                entity.transform.parent = Core.rotEntity.transform;
             }
             entity.transform.parent.children.Add(entity.transform);
 

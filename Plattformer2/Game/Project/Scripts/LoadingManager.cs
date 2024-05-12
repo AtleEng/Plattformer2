@@ -24,7 +24,7 @@ namespace Engine
             }
         }
 
-        static string prePath = @"Game\Project\Levels\"; //In this folder must all levels be
+        public static string prePath = @"Game\Project\Levels\Main\"; //In this folder must all levels be
         static Dictionary<int, Type> entitysInLevel = new() //Dictionery of all diffrent levelObj <=> index
         {
             {1, typeof(Block)},
