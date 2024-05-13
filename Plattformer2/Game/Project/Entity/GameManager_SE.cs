@@ -10,7 +10,7 @@ namespace Engine
         {
             name = "GameManager";
 
-            Camera.zoom = 1.6f;
+            Camera.zoom = 1.65f;
 
             UIText levelUIText = new()
             {

@@ -1,25 +1,12 @@
-using System;
 using System.Numerics;
-using System.Text.Json;
-using Raylib_cs;
-using UI;
+using CoreEngine;
 
 namespace Engine
 {
     //Class that handle loading in levels
     public class LevelMenuManager : GameEntity
     {
-        static string prePath = @"Game\Project\Levels\"; //In this folder must all levels be
-
-        static List<GameEntity> levelEntities = new(); //All Entitys in level
-
         List<ButtonObject> levelButtons = new();
-
-        static JsonSerializerOptions options = new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            PropertyNameCaseInsensitive = true
-        };
 
         public override void OnInnit() //Creates the "Folder" entity
         {
@@ -37,6 +24,14 @@ namespace Engine
                     System.Console.WriteLine(index);
                     Action action = () => SpawnFilesButtons(allFiles[index]);
                     ButtonObject folderButton = new ButtonObject(action);
+
+                    // Split the directory path by directory separator
+                    string[] directories = allFiles[index][0].Split(Path.DirectorySeparatorChar);
+
+                    // The "Levels" directory will be the second-to-last element in the array
+                    string folderDirectoryName = directories[directories.Length - 2];
+
+                    folderButton.uIText.text = folderDirectoryName;
 
                     EntityManager.SpawnEntity(folderButton, new Vector2(550, (100 * posIndex) + 50), new Vector2(300, 100), transform);
                     posIndex++;
@@ -83,29 +78,8 @@ namespace Engine
         public void LoadLevel(string path)
         {
             System.Console.WriteLine($"Loading file: {path}");
-        }
-
-        public void OpenBrowse()
-        {
-            // Specify the directory path
-            string directoryPath = @"Game\Project\Levels\";
-
-            // Get all folders in the directory
-            string[] folders = Directory.GetDirectories(directoryPath, "*", SearchOption.AllDirectories);
-
-            // Display the list of folders and their files
-            foreach (string folder in folders)
-            {
-                Console.WriteLine($"Files in Folder: {folder}");
-
-                // Get all JSON files in the current folder
-                string[] jsonFiles = Directory.GetFiles(folder, "*.json");
-
-                foreach (string jsonFile in jsonFiles)
-                {
-                    Console.WriteLine(folder + @"\" + jsonFile);
-                }
-            }
+            PlayScene playScene = new PlayScene(path);
+            Core.ChangeRotEntity(playScene);
         }
         public List<List<string>> GetFiles()
         {

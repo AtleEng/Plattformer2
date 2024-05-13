@@ -41,11 +41,7 @@ namespace Engine
 
         public static Dictionary<int, string> levels = new() //Dictionery of the levelIndex <=> FilePath
         {
-            {1, "Level1"},
-            {2, "Level2"},
-            {3, "Level3"},
-            {4, "Level4"},
-            {5, "Level5"}
+           
         };
         static List<GameEntity> levelEntities = new(); //All Entitys in level
 
@@ -59,6 +55,46 @@ namespace Engine
         {
             empty.name = "Level";
             EntityManager.SpawnEntity(empty);
+
+            levels.Clear();
+            if (Directory.Exists(prePath))
+            {
+                // It's a directory
+                string[] jsonFiles = Directory.GetFiles(prePath, "*.json");
+                for (int i = 0; i < jsonFiles.Length; i++)
+                {
+                    // Split the directory path by directory separator
+                    string[] directories = jsonFiles[i].Split(Path.DirectorySeparatorChar);
+
+                    // The "Levels" directory will be the second-to-last element in the array
+                    string levelsDirectoryName = directories[directories.Length - 1];
+
+                    if (levelsDirectoryName.Contains(".json"))
+                    {
+                        levelsDirectoryName = levelsDirectoryName.Split(".")[0];
+                    }
+                    levels.Add(i + 1, levelsDirectoryName);
+                }
+            }
+            else if (File.Exists(prePath) && Path.GetExtension(prePath).Equals(".json", StringComparison.OrdinalIgnoreCase))
+            {
+                // Split the directory path by directory separator
+                    string[] directories = prePath.Split(Path.DirectorySeparatorChar);
+
+                    // The "Levels" directory will be the second-to-last element in the array
+                    string levelsDirectoryName = directories[directories.Length - 1];
+
+                    if (levelsDirectoryName.Contains(".json"))
+                    {
+                        prePath = prePath.Replace(levelsDirectoryName, "");
+                        levelsDirectoryName = levelsDirectoryName.Split(".")[0];
+                    }
+                    levels.Add(1, levelsDirectoryName);
+            }
+            else
+            {
+                Console.WriteLine("Invalid path or file not found.");
+            }
         }
 
         public static void SaveLevel(string path, int[,] level) //Used this to save the first level, not used in the moment
@@ -124,7 +160,7 @@ namespace Engine
             }
         }
 
-        static void SpawEntitiesInLevel(int[,] level) //Spaw in all entitys
+        public static void SpawEntitiesInLevel(int[,] level) //Spaw in all entitys
         {
             //loop the whole grid
             for (int x = 0; x < level.GetLength(0); x++)

@@ -12,6 +12,11 @@ namespace Engine
         Animator? anim;
         GameManagerScript gM;
 
+        bool hasEnteredPortal;
+        float timeToChangeScene = 1;
+
+        Sound enterSound = Raylib.LoadSound(@"Game\Project\Audio\level-up-bonus-sequence-2-186891.mp3");
+
         public override void Start()
         {
             //Play the idle animation
@@ -25,13 +30,26 @@ namespace Engine
             gM = gameManager.GetComponent<GameManagerScript>();
         }
 
+        public override void Update(float delta)
+        {
+            if (hasEnteredPortal)
+            {
+                timeToChangeScene -= delta;
+                if (timeToChangeScene < 0)
+                {
+                    gM.ChangeLevel(LoadingManager.CurrentLevel + 1);
+                }
+            }
+        }
+
         public override void OnTrigger(Collider other) // if triggered by player, change level
         {
             PlayerMovement? player = other.gameEntity.GetComponent<PlayerMovement>();
             if (player != null)
             {
+                Raylib.PlaySound(enterSound);
                 EntityManager.DestroyEntity(player.gameEntity);
-                gM.ChangeLevel(LoadingManager.CurrentLevel + 1);
+                hasEnteredPortal = true;
             }
         }
 

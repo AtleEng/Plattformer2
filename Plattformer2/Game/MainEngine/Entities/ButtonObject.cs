@@ -33,7 +33,7 @@ namespace Engine
                 text = "Button",
                 color = Color.Black
             };
-            EntityManager.SpawnEntity(new TextBox(uIText), Vector2.Zero, Vector2.One, transform);
+            EntityManager.SpawnEntity(new TextBox(uIText), new Vector2(25, 25), Vector2.One, transform);
 
             button = new Button(onKlick, uIImage);
             AddComponent<Button>(button);

@@ -59,6 +59,7 @@ namespace Engine
 
         //Audio
         Sound jumpSound = Raylib.LoadSound(@"Game\Project\Audio\cartoon-jump-6462.mp3");
+        Sound deathSound = Raylib.LoadSound(@"Game\Project\Audio\jump-climb-or-damage-sound-f-95942.mp3");
 
         GameManagerScript gM;
         #endregion
@@ -160,7 +161,7 @@ namespace Engine
 
             if (gameEntity.transform.position.Y > LoadingManager.LevelSize.Y + 3)
             {
-                LoadingManager.Load(LoadingManager.CurrentLevel);
+                Kill();
             }
         }
         void XInput() //get the x movement input
@@ -283,8 +284,13 @@ namespace Engine
         {
             if (other.gameEntity is IKill)
             {
-                gM.ChangeLevel(LoadingManager.CurrentLevel);
+                Kill();
             }
+        }
+        void Kill()
+        {
+            Raylib.PlaySound(deathSound);
+            gM.ChangeLevel(LoadingManager.CurrentLevel);
         }
         public enum PlayerStates //The diffrent states of the player 
         {

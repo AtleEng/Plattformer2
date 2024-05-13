@@ -11,7 +11,7 @@ namespace Engine
         {
            name = "StartScene";
 
-            Action startAction = () => Core.ChangeRotEntity(new PlayScene());
+            Action startAction = () => Core.ChangeRotEntity(new PlayScene(@"Game\Project\Levels\Main\"));
             ButtonObject startButton = new ButtonObject(startAction);
             startButton.uIText.text = "Play";
             EntityManager.SpawnEntity(startButton, new Vector2(175, 475), new Vector2(300, 100), transform);
