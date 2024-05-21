@@ -4,14 +4,23 @@ using CoreEngine;
 namespace Engine
 {
     //Class that handle loading in levels
-    public class LevelMenuManager : GameEntity
+    public class LevelMenuScript : Component
     {
+        List<ButtonObject> folderButtons = new();
         List<ButtonObject> levelButtons = new();
 
-        public override void OnInnit() //Creates the "Folder" entity
+        override public void Start() //Creates the "Folder" entity
         {
+            SpawnOptionsButtons();
+
             List<List<string>> allFiles = GetFiles();
             SpawnFolderButtons(allFiles);
+        }
+        void SpawnOptionsButtons()
+        {
+            ButtonObject button = new ButtonObject(() => Core.ChangeRotEntity(new StartScene()));
+            button.uIText.text = "Back";
+            EntityManager.SpawnEntity(button, new Vector2(175, 725), new Vector2(300, 100), gameEntity.transform);
         }
         public void SpawnFolderButtons(List<List<string>> allFiles)
         {
@@ -33,7 +42,8 @@ namespace Engine
 
                     folderButton.uIText.text = folderDirectoryName;
 
-                    EntityManager.SpawnEntity(folderButton, new Vector2(550, (100 * posIndex) + 50), new Vector2(300, 100), transform);
+                    EntityManager.SpawnEntity(folderButton, new Vector2(550, (125 * posIndex) + 75), new Vector2(300, 100), gameEntity.transform);
+                    folderButtons.Add(folderButton);
                     posIndex++;
                 }
             }
@@ -68,7 +78,7 @@ namespace Engine
 
                     levelButton.uIText.text = levelsDirectoryName;
 
-                    EntityManager.SpawnEntity(levelButton, new Vector2(900, (100 * posIndex) + 50), new Vector2(300, 100), transform);
+                    EntityManager.SpawnEntity(levelButton, new Vector2(900, (125 * posIndex) + 75), new Vector2(300, 100), gameEntity.transform);
                     levelButtons.Add(levelButton);
                     posIndex++;
                 }

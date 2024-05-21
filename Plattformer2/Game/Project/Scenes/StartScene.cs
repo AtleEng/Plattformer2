@@ -9,22 +9,24 @@ namespace Engine
         //Add all diffrent components
         public override void OnInnit()
         {
-           name = "StartScene";
+            name = "StartScene";
 
-            Action startAction = () => Core.ChangeRotEntity(new PlayScene(@"Game\Project\Levels\Main\"));
-            ButtonObject startButton = new ButtonObject(startAction);
-            startButton.uIText.text = "Play";
-            EntityManager.SpawnEntity(startButton, new Vector2(175, 475), new Vector2(300, 100), transform);
+            Dictionary<string, Action> buttonDictionary = new()
+            {
+                { "Play", () => Core.ChangeRotEntity(new PlayScene(@"Game\Project\Levels\Main\")) },
+                { "Levels", () => Core.ChangeRotEntity(new LevelMenuScene()) },
+                { "Editor", () => Core.ChangeRotEntity(new LevelEditorScene()) },
+                { "Back", () => Core.QuitGame() }
+            };
 
-            Action editorAction = () => Core.ChangeRotEntity(new EditorScene());
-            ButtonObject editorButton = new ButtonObject(editorAction);
-            editorButton.uIText.text = "Levels";
-            EntityManager.SpawnEntity(editorButton, new Vector2(175, 600), new Vector2(300, 100), transform);
-
-            Action quitAction = () => Core.QuitGame();
-            ButtonObject quitButton = new ButtonObject(quitAction);
-            quitButton.uIText.text = "Exit";
-            EntityManager.SpawnEntity(quitButton, new Vector2(175, 725), new Vector2(300, 100), transform);
+            int i = 0;
+            foreach (var keyValuePair in buttonDictionary)
+            {
+                ButtonObject button = new ButtonObject(keyValuePair.Value);
+                button.uIText.text = keyValuePair.Key;
+                EntityManager.SpawnEntity(button, new Vector2(175, (125 * i) + 75), new Vector2(300, 100), transform);
+                i++;
+            }
         }
     }
 }

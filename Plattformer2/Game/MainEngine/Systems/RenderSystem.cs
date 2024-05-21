@@ -50,7 +50,7 @@ namespace Graphics
 
             Raylib.BeginTextureMode(target);
             //Background color
-            Raylib.ClearBackground(new Color(41, 189, 193, 255));
+            Raylib.ClearBackground(new Color(29, 43, 83, 255));
             //Render all sprites
             RenderAll();
 
@@ -59,7 +59,7 @@ namespace Graphics
             Raylib.BeginDrawing();
 
             //Bar color
-            Raylib.ClearBackground(new Color(69, 43, 63, 255));
+            Raylib.ClearBackground(new Color(0, 0, 0, 255));
             //draw the texture with all things on
             Raylib.DrawTexturePro(target.Texture,
     new Rectangle(0.0f, 0.0f, (float)target.Texture.Width, (float)-target.Texture.Height),
