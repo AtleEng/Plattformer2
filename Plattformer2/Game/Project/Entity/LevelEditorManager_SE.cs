@@ -1,5 +1,6 @@
 using System.Numerics;
 using CoreEngine;
+using UI;
 
 namespace Engine
 {
@@ -9,7 +10,17 @@ namespace Engine
         public LevelEditorManager()
         {
             name = "LevelEditorManager";
-            LevelEditorScript levelMenuScript = new();
+
+            TextBox textBox = new(new UIText()
+            {
+                fontSize = 20
+            });
+            EntityManager.SpawnEntity(textBox, new Vector2(5, 55), Vector2.One, this.transform);
+
+            LevelEditorScript levelMenuScript = new()
+            {
+                pathText = textBox.uIText
+            };
             AddComponent<LevelEditorScript>(levelMenuScript);
         }
     }

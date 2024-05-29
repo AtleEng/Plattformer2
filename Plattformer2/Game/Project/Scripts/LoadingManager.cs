@@ -25,7 +25,7 @@ namespace Engine
         }
 
         public static string prePath = @"Game\Project\Levels\Main\"; //In this folder must all levels be
-        static Dictionary<int, Type> entitysInLevel = new() //Dictionery of all diffrent levelObj <=> index
+        public static Dictionary<int, Type> entitysInLevel = new() //Dictionery of all diffrent levelObj <=> index
         {
             {1, typeof(Block)},
             {2, typeof(JumpPad)},
@@ -41,11 +41,11 @@ namespace Engine
 
         public static Dictionary<int, string> levels = new() //Dictionery of the levelIndex <=> FilePath
         {
-           
+
         };
         static List<GameEntity> levelEntities = new(); //All Entitys in level
 
-        static JsonSerializerOptions options = new JsonSerializerOptions
+        public static JsonSerializerOptions options = new JsonSerializerOptions
         {
             WriteIndented = true,
             PropertyNameCaseInsensitive = true
@@ -79,17 +79,17 @@ namespace Engine
             else if (File.Exists(prePath) && Path.GetExtension(prePath).Equals(".json", StringComparison.OrdinalIgnoreCase))
             {
                 // Split the directory path by directory separator
-                    string[] directories = prePath.Split(Path.DirectorySeparatorChar);
+                string[] directories = prePath.Split(Path.DirectorySeparatorChar);
 
-                    // The "Levels" directory will be the second-to-last element in the array
-                    string levelsDirectoryName = directories[directories.Length - 1];
+                // The "Levels" directory will be the second-to-last element in the array
+                string levelsDirectoryName = directories[directories.Length - 1];
 
-                    if (levelsDirectoryName.Contains(".json"))
-                    {
-                        prePath = prePath.Replace(levelsDirectoryName, "");
-                        levelsDirectoryName = levelsDirectoryName.Split(".")[0];
-                    }
-                    levels.Add(1, levelsDirectoryName);
+                if (levelsDirectoryName.Contains(".json"))
+                {
+                    prePath = prePath.Replace(levelsDirectoryName, "");
+                    levelsDirectoryName = levelsDirectoryName.Split(".")[0];
+                }
+                levels.Add(1, levelsDirectoryName);
             }
             else
             {
@@ -106,7 +106,7 @@ namespace Engine
             string json = JsonSerializer.Serialize(jaggedArray);
 
             // Spara json på filen
-            File.WriteAllText(Path.Combine(prePath, $"{path}.json"), json);
+            File.WriteAllText($"{path}.json", json);
 
             Console.WriteLine($"JSON saved to {path}");
         }
@@ -211,7 +211,7 @@ namespace Engine
         }
 
         // Convert 2D array to jagged array (Because json is dumb)
-        static int[][] ConvertToJaggedArray(int[,] array)
+        public static int[][] ConvertToJaggedArray(int[,] array)
         {
             int rows = array.GetLength(0); //Get int[this,] value
             int cols = array.GetLength(1); //Get int[,that] value
@@ -229,7 +229,7 @@ namespace Engine
             return jaggedArray; //return jagged array
         }
         // Convert jagged array to 2D array (Because json is dumb)
-        static int[,] ConvertTo2DArray(int[][] jaggedArray)
+        public static int[,] ConvertTo2DArray(int[][] jaggedArray)
         {
             int rows = jaggedArray.Length; //Get amount of rows from jagged array
             int cols = jaggedArray[0].Length; //Get amount of columes from jagged array

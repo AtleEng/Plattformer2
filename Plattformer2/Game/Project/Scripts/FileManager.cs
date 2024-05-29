@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using Engine;
 
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
 public struct OpenFileName
@@ -92,5 +93,21 @@ public static class OpenDialog
         }
 
         return string.Empty;
+    }
+    public static void SaveJsonToFile(int[,] level)
+    {
+        string directory = GetDirectory();
+        Console.Write("Enter the name of the file (without extension): ");
+        string fileName = Console.ReadLine();
+        string filePath = Path.Combine(directory, fileName + ".json");
+
+        var sampleObject = new
+        {
+            Name = "Sample",
+            Date = DateTime.Now,
+            IsValid = true
+        };
+
+        LoadingManager.SaveLevel(directory, level);
     }
 }
