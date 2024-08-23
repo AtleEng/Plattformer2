@@ -10,12 +10,12 @@ namespace Engine
     public class PortalScript : Component, IScript
     {
         Animator? anim;
-        GameManagerScript gM;
 
         bool hasEnteredPortal;
         float timeToChangeScene = 1;
 
         Sound enterSound = Raylib.LoadSound(@"Game\Project\Audio\level-up-bonus-sequence-2-186891.mp3");
+        public event EventHandler PlayerEnteredPortal;
 
         public override void Start()
         {
@@ -25,9 +25,6 @@ namespace Engine
             {
                 anim.PlayAnimation("Idle");
             }
-            //Get the gameManagerScript
-            GameManager gameManager = EntityManager.GetGameEntity<GameManager>();
-            gM = gameManager.GetComponent<GameManagerScript>();
         }
 
         public override void Update(float delta)
@@ -37,7 +34,7 @@ namespace Engine
                 timeToChangeScene -= delta;
                 if (timeToChangeScene < 0)
                 {
-                    gM.ChangeLevel(LoadingManager.CurrentLevel + 1);
+                    PlayerEnteredPortal?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
@@ -52,6 +49,5 @@ namespace Engine
                 hasEnteredPortal = true;
             }
         }
-
     }
 }

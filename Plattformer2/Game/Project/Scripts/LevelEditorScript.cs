@@ -29,7 +29,7 @@ namespace Engine
                 { "Open", () => Open() },
                 { "New", () => OpenNew() },
                 { "Save", () => Save() },
-                { "Play", () => Core.ChangeRotEntity(new StartScene()) }
+                { "Play", () => PlayLevel() }
             };
 
             int i = 0;
@@ -153,6 +153,10 @@ namespace Engine
                 Console.WriteLine($"Entity: {key} is not");
                 return null;
             }
+        }
+        void PlayLevel()
+        {
+
         }
     }
 }

@@ -6,6 +6,7 @@ namespace Engine
     //Class that handle loading in levels
     public static class LoadingManager
     {
+        static GameManagerScript gM;
         static GameEntity empty = new(); //Use this entity to store all levelObj in to
         static int currentLevel = 0; //The index of the current level
         static public int CurrentLevel //read only, use method Load(int i);
@@ -39,10 +40,7 @@ namespace Engine
         };
         //TODO I know I can use a list but it is for readability
 
-        public static Dictionary<int, string> levels = new() //Dictionery of the levelIndex <=> FilePath
-        {
-
-        };
+        public static Dictionary<int, string> levels = new(); //Dictionery of the levelIndex <=> FilePath
         static List<GameEntity> levelEntities = new(); //All Entitys in level
 
         public static JsonSerializerOptions options = new JsonSerializerOptions
@@ -51,8 +49,10 @@ namespace Engine
             PropertyNameCaseInsensitive = true
         };
 
-        public static void StartLoading() //Creates the "Folder" entity
+        public static void StartLoading(GameManagerScript gMScript) //Creates the "Folder" entity
         {
+            gM = gMScript;
+
             empty.name = "Level";
             EntityManager.SpawnEntity(empty);
 
@@ -172,6 +172,17 @@ namespace Engine
                         GameEntity? entity = GetEntityInstance(level[x, y]); //Use method to create a instace from type
                         if (entity != null) //Check so it worked, otherwise it will become air
                         {
+                            PortalScript pS = entity.GetComponent<PortalScript>();
+                            if (pS != null)
+                            {
+                                pS.PlayerEnteredPortal += ChangeLevel;
+                            }
+                            PlayerMovement pM = entity.GetComponent<PlayerMovement>();
+                            if (pM != null)
+                            {
+                                pM.PlayerDie += ReloadLevel;
+                            }
+
                             levelEntities.Add(entity); //add entity to tracker list
                             Vector2 spawPos = new Vector2(y, x); //Put it in the right place
                             //Spawn as child of empty
@@ -180,6 +191,14 @@ namespace Engine
                     }
                 }
             }
+        }
+        public static void ChangeLevel(object sender, EventArgs e)
+        {
+            gM.ChangeLevel(CurrentLevel + 1);
+        }
+        public static void ReloadLevel(object sender, EventArgs e)
+        {
+            gM.ChangeLevel(CurrentLevel);
         }
         static void ClearLevel() //Clear the whole level
         {

@@ -30,7 +30,7 @@ namespace Engine
         public override void Start()
         {
             //Starts the loading manager
-            LoadingManager.StartLoading();
+            LoadingManager.StartLoading(this);
         }
         public override void OnDestroy()
         {
@@ -72,8 +72,6 @@ namespace Engine
                 Raylib.PlayMusicStream(gameMusic);
             }
         }
-
-
         void StartLevel()
         {
             //Display the current level number

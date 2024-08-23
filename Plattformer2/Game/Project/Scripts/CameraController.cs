@@ -1,9 +1,6 @@
 using System.Numerics;
 using System.Collections.Generic;
 using Raylib_cs;
-using Engine;
-using Physics;
-using Animation;
 
 namespace Engine
 {

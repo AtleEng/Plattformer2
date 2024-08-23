@@ -61,7 +61,7 @@ namespace Engine
         Sound jumpSound = Raylib.LoadSound(@"Game\Project\Audio\cartoon-jump-6462.mp3");
         Sound deathSound = Raylib.LoadSound(@"Game\Project\Audio\jump-climb-or-damage-sound-f-95942.mp3");
 
-        GameManagerScript gM;
+        public event EventHandler PlayerDie;
         #endregion
         public override void Start()
         {
@@ -70,10 +70,6 @@ namespace Engine
             anim = gameEntity.GetComponent<Animator>();
             sprite = gameEntity.GetComponent<Sprite>();
             collider = gameEntity.GetComponent<Collider>();
-
-            //Get the gameManager script
-            GameManager gameManager = EntityManager.GetGameEntity<GameManager>();
-            gM = gameManager.GetComponent<GameManagerScript>();
         }
 
         void HandleAnimation() //This method handles animation states
@@ -290,7 +286,8 @@ namespace Engine
         void Kill()
         {
             Raylib.PlaySound(deathSound);
-            gM.ChangeLevel(LoadingManager.CurrentLevel);
+            PlayerDie?.Invoke(this, EventArgs.Empty);
+            //gM.ChangeLevel(LoadingManager.CurrentLevel);
         }
         public enum PlayerStates //The diffrent states of the player 
         {
