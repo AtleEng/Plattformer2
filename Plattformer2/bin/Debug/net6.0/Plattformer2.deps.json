@@ -8,13 +8,13 @@
     ".NETCoreApp,Version=v6.0": {
       "Plattformer2/1.0.0": {
         "dependencies": {
-          "Raylib-cs": "6.0.0"
+          "Raylib-cs": "6.1.1"
         },
         "runtime": {
           "Plattformer2.dll": {}
         }
       },
-      "Raylib-cs/6.0.0": {
+      "Raylib-cs/6.1.1": {
         "dependencies": {
           "System.Numerics.Vectors": "4.5.0"
         },
@@ -61,12 +61,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Raylib-cs/6.0.0": {
+    "Raylib-cs/6.1.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-SXyiBBUxn9/tI7AnDKqiBam34BsFTlfNPZ0pUhcxKv1KLzAhda4UKHLlDd0e46+4T4mGNzJntDnvKYQ79FXDsA==",
-      "path": "raylib-cs/6.0.0",
-      "hashPath": "raylib-cs.6.0.0.nupkg.sha512"
+      "sha512": "sha512-ty5RQoFK7bW4mTogwMf55Zh73DMJMvFLLJTarhmL1g7loxeLYoHTFufN7JagObdLHo2zB3wVrtEHVCXFoZ9TMg==",
+      "path": "raylib-cs/6.1.1",
+      "hashPath": "raylib-cs.6.1.1.nupkg.sha512"
     },
     "System.Numerics.Vectors/4.5.0": {
       "type": "package",

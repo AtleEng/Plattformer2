@@ -137,7 +137,7 @@ namespace CoreEngine
             {
                 foreach (Component component in entity.components)
                 {
-                    Console.WriteLine($"   {space}{component.GetType().Name} [{component.PrintStats()}]");
+                    Console.WriteLine($"| {space}+{component.GetType().Name} [{component.PrintStats()}]");
                 }
             }
             // Entities
@@ -145,10 +145,10 @@ namespace CoreEngine
             {
                 foreach (var child in entity.transform.children)
                 {
-                    PrintEntityTree(child.gameEntity, $"{layer}>", $"{space} "); //reapetes ontill all children of scene are printed
+                    PrintEntityTree(child.gameEntity, $"{layer}>", $"{space}| "); //reapetes until all children of scene are printed
                 }
-
             }
+            System.Console.WriteLine($"{space}<");
         }
         static void GetAllActiveEntities(GameEntity entity) //Get all entitys in gameEntitys with isActive == true
         {

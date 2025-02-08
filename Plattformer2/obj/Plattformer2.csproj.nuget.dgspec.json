@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\atlee\\Documents\\GameDev\\Projects\\Plattformer2\\Plattformer2\\Plattformer2.csproj": {}
+    "c:\\Users\\atlee\\Documents\\C# Projects\\Plattformer2\\Plattformer2\\Plattformer2.csproj": {}
   },
   "projects": {
-    "c:\\Users\\atlee\\Documents\\GameDev\\Projects\\Plattformer2\\Plattformer2\\Plattformer2.csproj": {
+    "c:\\Users\\atlee\\Documents\\C# Projects\\Plattformer2\\Plattformer2\\Plattformer2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\atlee\\Documents\\GameDev\\Projects\\Plattformer2\\Plattformer2\\Plattformer2.csproj",
+        "projectUniqueName": "c:\\Users\\atlee\\Documents\\C# Projects\\Plattformer2\\Plattformer2\\Plattformer2.csproj",
         "projectName": "Plattformer2",
-        "projectPath": "c:\\Users\\atlee\\Documents\\GameDev\\Projects\\Plattformer2\\Plattformer2\\Plattformer2.csproj",
+        "projectPath": "c:\\Users\\atlee\\Documents\\C# Projects\\Plattformer2\\Plattformer2\\Plattformer2.csproj",
         "packagesPath": "C:\\Users\\atlee\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\atlee\\Documents\\GameDev\\Projects\\Plattformer2\\Plattformer2\\obj\\",
+        "outputPath": "c:\\Users\\atlee\\Documents\\C# Projects\\Plattformer2\\Plattformer2\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\atlee\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -32,6 +32,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -40,7 +45,7 @@
           "dependencies": {
             "Raylib-cs": {
               "target": "Package",
-              "version": "[6.0.0, )"
+              "version": "[6.1.1, )"
             }
           },
           "imports": [
@@ -54,12 +59,30 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.33, 6.0.33]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[6.0.33, 6.0.33]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.33, 6.0.33]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[6.0.33, 6.0.33]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.411\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

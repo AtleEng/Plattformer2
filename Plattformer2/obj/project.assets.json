@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net6.0": {
-      "Raylib-cs/6.0.0": {
+      "Raylib-cs/6.1.1": {
         "type": "package",
         "dependencies": {
           "System.Numerics.Vectors": "4.5.0"
@@ -52,19 +52,17 @@
     }
   },
   "libraries": {
-    "Raylib-cs/6.0.0": {
-      "sha512": "SXyiBBUxn9/tI7AnDKqiBam34BsFTlfNPZ0pUhcxKv1KLzAhda4UKHLlDd0e46+4T4mGNzJntDnvKYQ79FXDsA==",
+    "Raylib-cs/6.1.1": {
+      "sha512": "ty5RQoFK7bW4mTogwMf55Zh73DMJMvFLLJTarhmL1g7loxeLYoHTFufN7JagObdLHo2zB3wVrtEHVCXFoZ9TMg==",
       "type": "package",
-      "path": "raylib-cs/6.0.0",
+      "path": "raylib-cs/6.1.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "lib/net5.0/Raylib-cs.dll",
-        "lib/net5.0/Raylib-cs.xml",
         "lib/net6.0/Raylib-cs.dll",
         "lib/net6.0/Raylib-cs.xml",
-        "raylib-cs.6.0.0.nupkg.sha512",
+        "raylib-cs.6.1.1.nupkg.sha512",
         "raylib-cs.nuspec",
         "raylib-cs_64x64.png",
         "runtimes/linux-x64/native/libraylib.so",
@@ -124,7 +122,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "Raylib-cs >= 6.0.0"
+      "Raylib-cs >= 6.1.1"
     ]
   },
   "packageFolders": {
@@ -133,11 +131,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\atlee\\Documents\\GameDev\\Projects\\Plattformer2\\Plattformer2\\Plattformer2.csproj",
+      "projectUniqueName": "c:\\Users\\atlee\\Documents\\C# Projects\\Plattformer2\\Plattformer2\\Plattformer2.csproj",
       "projectName": "Plattformer2",
-      "projectPath": "C:\\Users\\atlee\\Documents\\GameDev\\Projects\\Plattformer2\\Plattformer2\\Plattformer2.csproj",
+      "projectPath": "c:\\Users\\atlee\\Documents\\C# Projects\\Plattformer2\\Plattformer2\\Plattformer2.csproj",
       "packagesPath": "C:\\Users\\atlee\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\atlee\\Documents\\GameDev\\Projects\\Plattformer2\\Plattformer2\\obj\\",
+      "outputPath": "c:\\Users\\atlee\\Documents\\C# Projects\\Plattformer2\\Plattformer2\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\atlee\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -158,6 +156,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -166,7 +169,7 @@
         "dependencies": {
           "Raylib-cs": {
             "target": "Package",
-            "version": "[6.0.0, )"
+            "version": "[6.1.1, )"
           }
         },
         "imports": [
@@ -180,12 +183,30 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[6.0.33, 6.0.33]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[6.0.33, 6.0.33]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[6.0.33, 6.0.33]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[6.0.33, 6.0.33]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.411\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }

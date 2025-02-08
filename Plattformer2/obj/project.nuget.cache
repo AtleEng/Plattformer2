@@ -1,11 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "BLIipIfsRb5+28ER5XJp1Kl+TQCMJqT/OI/TrKD4Y/o/QoWf1S3Mcz5YeV6BCa8dEOIj4gaMr4OrEf5gY4ZmNA==",
+  "dgSpecHash": "i7U4Sq/PwI0=",
   "success": true,
-  "projectFilePath": "c:\\Users\\atlee\\Documents\\GameDev\\Projects\\Plattformer2\\Plattformer2\\Plattformer2.csproj",
+  "projectFilePath": "c:\\Users\\atlee\\Documents\\C# Projects\\Plattformer2\\Plattformer2\\Plattformer2.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\atlee\\.nuget\\packages\\raylib-cs\\6.0.0\\raylib-cs.6.0.0.nupkg.sha512",
-    "C:\\Users\\atlee\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512"
+    "C:\\Users\\atlee\\.nuget\\packages\\raylib-cs\\6.1.1\\raylib-cs.6.1.1.nupkg.sha512",
+    "C:\\Users\\atlee\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
+    "C:\\Users\\atlee\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.33\\microsoft.netcore.app.ref.6.0.33.nupkg.sha512",
+    "C:\\Users\\atlee\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.33\\microsoft.windowsdesktop.app.ref.6.0.33.nupkg.sha512",
+    "C:\\Users\\atlee\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.33\\microsoft.aspnetcore.app.ref.6.0.33.nupkg.sha512",
+    "C:\\Users\\atlee\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.33\\microsoft.netcore.app.host.win-x64.6.0.33.nupkg.sha512"
   ],
   "logs": []
 }
